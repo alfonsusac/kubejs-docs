@@ -1,103 +1,114 @@
-import Image from "next/image";
+import Link from "next/link"
+import { Suspense } from "react"
+import { MDX } from "./mdx"
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+    <div id="home_page" className="max-w-2xl mx-auto">
+      <section className="my-20">
+        <Suspense>
+          <MDX
+            source={content}
+            components={{
+              NavLinks: NavLinks,
+            }}
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        </Suspense>
+      </section>
     </div>
-  );
+  )
 }
+
+
+
+function NavLinks() {
+  return (
+    <nav className="flex gap-2 mb-20">
+      <Link href="/docs" className="p-2 px-5 bg-purple-400/20 hover:bg-purple-400/40 text-purple-400 rounded-lg font-semibold tracking-tight text-sm">Documentation</Link>
+      <Link href={URLS.sourceCode} className="p-2 px-5 bg-zinc-600/20 hover:bg-zinc-600/40 rounded-lg font-semibold tracking-tight text-sm">Source Code</Link>
+      <Link href={URLS.downloads} className="p-2 px-5 bg-zinc-600/20 hover:bg-zinc-600/40 rounded-lg font-semibold tracking-tight text-sm">Downloads</Link>
+    </nav>
+  )
+}
+
+const URLS = {
+  kubejswiki: "https://kubejs.com/wiki/",
+  sourceCode: "https://github.com/KubeJS-Mods/KubeJS/tree/main",
+  downloads: "https://kubejs.com/downloads",
+  discord: "https://discord.gg/lat",
+  supportChannel: "https://discord.com/channels/303440391124942858/1254790121807548437"
+}
+
+
+
+const content = `
+
+# <Logo /> KubeJS
+Customize your modpack or server with JavaScript!
+
+<NavLinks />
+
+---
+
+### What does this mod do?
+
+This mod lets you create scripts in JavaScript language to manage your server, add new blocks and items, change recipes, add custom handlers for quest mods and more!
+
+
+### How to use it?
+
+Run the game with mod installed once. It should generate a \`kubejs\` folder in your minecraft directory with example scripts and README.txt. Read that!
+
+
+### I don't know JavaScript
+
+There's examples and pre-made scripts here. And you can always ask in discord support channel for help with scripts, but be specific.
+
+
+### Can I reload scripts?
+
+- \`startup_scripts/\`: Restart the game or use \`/kubejs reload startup_scripts\`. Not everything is reloadable - some things require you to restart the game (e.g. registries) or the world (e.g. worldgen).
+
+- \`server_scripts/\`: Use \`/reload\` to reload scripts, recipes, tags and all data or \`/kubejs reload server_scripts\` to reload scripts only
+
+- \`client_scripts/\`: Use \`F3 + T\` to reload scripts and assets or \`/kubejs reload client_scripts\` to reload scripts only
+
+
+### What mod recipes does it support/is mod X supported?
+
+If the mod uses datapack recipes, then it's supported by default. Some more complicated mods require addon mods, but in theory, still would work with datapack recipes. See [Editing Recipes]() and [Addons]() sections for more info.
+
+
+### What features does this mod have?
+
+See [Tutorials]().
+
+
+### How does this mod work?
+
+It uses a fork of Rhino, a JavaScript engine by Mozilla to convert JS code to Java classes at runtime. KubeJS wraps minecraft classes and adds utilities to simplify that a lot and remove need for mappings. [Architectury]() lets nearly the same source code be compiled for both Forge and Fabric making porting extremely easy.
+
+
+### Ok, but what if it.. doesn't work?
+
+You can report issues [here]().
+
+
+### I have more questions / suggestions!
+
+If wiki didn't have the answer for what you were looking for, you can join the [Discord server]() and ask for help on [#kubejs-support](${ URLS.supportChannel }) channel!
+
+<DiscordEmbed />
+
+### Links
+
+Original KubeJS wiki: [KubeJS Wiki](${ URLS.kubejswiki })
+
+Source code: [Source code](${ URLS.sourceCode })
+
+Download: [Download](${ URLS.downloads })
+
+<Warn>
+Last supported Minecraft version is 1.21, anything below that and you're on your own!
+</Warn>
+`
