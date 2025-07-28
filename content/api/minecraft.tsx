@@ -18,5 +18,7 @@ export const ItemStack = External("ItemStack"              , "net.minecraft.worl
 
 export const ResourceLocation = External("ResourceLocation", "net.minecraft.resources.ResourceLocation")
 
-export const Player = External("Player"                    , "net.minecraft.world.entity.player.Player")
+export const Player = External("Player", "net.minecraft.world.entity.player.Player")
+
 export const ServerPlayer = External("ServerPlayer"        , "net.minecraft.server.level.ServerPlayer")
+export const MinecraftServer = External("MinecraftServer"  , "net.minecraft.server.MinecraftServer")

@@ -2,17 +2,32 @@ import { notFound } from "next/navigation"
 import { eventGroups } from "../../../../../../../content/api/events"
 import { ArticleLayoutTemplate } from "@/component/article"
 import { prose } from "@/component/prose"
+import { isEventHandler, isMethodType, isObjectType } from "../../../../../../../content/api/helper"
+import { RenderMethodOverloads } from "../../../../../../../content/api/helper.display"
 
 export default async function DocsAPIEventGroupEventPage(props: {
   params: Promise<{ event_name: string, event_group_name: string }>
 }) {
   const { event_name, event_group_name } = await props.params
 
-  const eventGroup = eventGroups.find(e => e.$name === event_group_name)
+  const eventGroup = eventGroups.find(e => e.$typeName === event_group_name)
   if (!eventGroup) notFound()
 
-  const event = eventGroup.$events[event_name]
+
+
+  const event = eventGroup.$members[event_name]
   if (!event) notFound()
+
+  if (!isEventHandler(event))
+    throw new Error(`Event ${ event_name } is not a valid event handler. Missing $info or $scope.`)
+
+  const eventEventHandler = event.$overloads[0].$params.find(p => p.$type.$type === 'method')?.$type
+  if (!isMethodType(eventEventHandler))
+    throw new Error(`Event ${ event_name } does not have a valid event handler object type.`)
+
+  const eventHandlerEventObject = eventEventHandler.$overloads[0].$params[0].$type
+  if (!isObjectType(eventHandlerEventObject))
+    throw new Error(`Event ${ event_name } does not have a valid event handler object type.`)
 
 
   return (
@@ -28,6 +43,10 @@ export default async function DocsAPIEventGroupEventPage(props: {
 
 <EventType />
 
+### Event Object
+
+<EventHandlerEventType />
+
 
       `}
       components={{
@@ -36,15 +55,28 @@ export default async function DocsAPIEventGroupEventPage(props: {
         EventType: () => (
           <prose.pre>
             <code className="language-js">
-              {event.$overloads.map(o => {
-                return `
-(method) ${ event_name }(
-${o[1]?.map(p => `  ${p.$label}: ${p.$type}`).join(',\n')}
-): ${o[0]}`.trim() + '\n'
-              })}
+              <RenderMethodOverloads data={event} methodName={event_name} splitLines />
             </code>
           </prose.pre>
-        )
+        ),
+        EventHandlerEventType: () => (
+          <>
+            <>
+              {Object.entries(eventHandlerEventObject.$availableAPI).map(([name, m], i) => (
+                <div key={i} className="my-3">
+                  <p>
+                    {
+                      m.$type === 'method' && <RenderMethodOverloads data={m} methodName={name} />
+                    }
+                  </p>
+                  <prose.p className="my-0 ml-4">
+                    {m.$type === 'method' && m.$info}
+                  </prose.p>
+                </div>
+              ))}
+            </>
+          </>
+        ),
       }}
     />
   )

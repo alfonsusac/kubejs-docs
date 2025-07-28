@@ -1,6 +1,6 @@
-import { Method, nullable, Object, param, Property } from "../helper"
+import { Method, nullable, Object, param, fsig, Int, Boolean, GenericObject, String, Void, Double } from "../helper"
 import { Collection, List, Map } from "../java"
-import { Level, BlockPos, ResourceLocation, Direction, BlockState, BlockEntity, CompoundTag, Entity, EntityType, ServerPlayer, ItemStack } from "../minecraft"
+import { Level, BlockPos, ResourceLocation, Direction, BlockState, BlockEntity, CompoundTag, Entity, EntityType, ServerPlayer, ItemStack, Block } from "../minecraft"
 import { ExplosionJS, InventoryKJS } from "./core"
 import { EntityArrayList } from "./player"
 
@@ -11,68 +11,67 @@ export const FireworksJS = Object("FireworkJS", {
 
 
 // package dev.latvian.mods.kubejs.level;
-export const BlockContainerJS = Object(
-  "BlockContainerJS",
-  {
-    minecraftLevel: Property("", Level),
-    clearCache: Method("", []),
-    getLevel: Method("", [[Level]]),
-    getPos: Method("", [[BlockPos]]),
-    getDimension: Method("", [[ResourceLocation]]),
-    getX: Method("", [['int']]),
-    getY: Method("", [['int']]),
-    getZ: Method("", [['int']]),
-    offset: Method("", [
-      ['BlockContainerJS', [Direction, 'int | null']],
-      ['BlockContainerJS', ['x: int', 'y: int', 'z: int']],
-    ]),
-    getDown: Method("", [['BlockContainerJS']]),
-    getUp: Method("", [['BlockContainerJS']]),
-    getNorth: Method("", [['BlockContainerJS']]),
-    getSouth: Method("", [['BlockContainerJS']]),
-    getWest: Method("", [['BlockContainerJS']]),
-    getEast: Method("", [['BlockContainerJS']]),
-    getBlockState: Method("", [[BlockState]]),
-    setBlockState: Method("", [['void', [BlockState, `flags:int`]]]),
-    getId: Method("", []),
-    getTags: Method("", [[Collection(ResourceLocation)]]),
-    hasTag: Method("", [['boolean', [ResourceLocation]]]),
-    set: Method("", [['void', [
-      param('id', ResourceLocation),
-      param('properties', Map(), true),
-      param('flags', 'int')
-    ]]]),
-    getProperties: Method("", [[Map('string', 'string')]]),
-    getEntity: Method("", [[nullable(BlockEntity)]]),
-    getEntityId: Method("", [['string']]),
-    getEntityData: Method("", [[nullable(CompoundTag)]]),
-    setEntityData: Method("", [['void', [param('tag', CompoundTag, true)]]]),
-    mergeEntityData: Method("", [['void', [param('tag', CompoundTag, true)]]]),
-    getLight: Method("", [['int']]),
-    getSkyLight: Method("", [['int']]),
-    getBlockLight: Method("", [['int']]),
-    getCanSeeSky: Method("", [['boolean']]),
-    canSeeSkyFromBelowWater: Method("", [['boolean']]),
-    toString: Method("", [['string']]),
-    createExplosion: Method("", [[ExplosionJS]]),
-    createEntity: Method("", [[nullable(Entity), [param('type', EntityType)]]]),
-    spawnLightning: Method("", [
-      ['void', [param('effectOnly', 'boolean'), param('player', ServerPlayer, true)]],
-      ['void', []],
-    ]),
-    spawnFireworks: Method("", [['void', [param('fireworks', FireworksJS)]]]),
-    getInventory: Method("", [[nullable(InventoryKJS), [param('facing', Direction, true)]]]),
-    getItem: Method("", [[ItemStack]]),
-    getDrops: Method("", [
-      [List(ItemStack), [param('entity', Entity, true), param('heldItem', ItemStack)]],
-      [List(ItemStack)]
-    ]),
-    popItem: Method("", [['void', [param('item', ItemStack)]]]),
-    popItemFromFace: Method("", [['void', [param('item', ItemStack), param('dir', Direction)]]]),
-    equals: Method("", [['boolean', [param('obj', 'object')]]]),
-    getPlayersInRadius: Method("", [[EntityArrayList, [param('radius', 'double', true)]]]),
-    getBiomeId: Method("", [[ResourceLocation]]),
-    specialEquals: Method("", [['boolean', [param('obj', 'object'), param('shallow', 'boolean')]]]),
-    getTypeData: Method("", [[CompoundTag]])
-  })
+export const BlockContainerJS = Object("BlockContainerJS", {
+  minecraftLevel: Level,
+  // transient
+  cachedState: BlockState,
+  cachedEntity: BlockEntity,
+  // --
+  clearCache: Method(""),
+  getLevel: Method("", fsig(Level)),
+  getPos: Method("", fsig(BlockPos)),
+  getDimension: Method("", fsig(ResourceLocation)),
+  getX: Method("", fsig(Int)),
+  getY: Method("", fsig(Int)),
+  getZ: Method("", fsig(Int)),
+  // offset: Method("", fsig(BlockContainerJS, param('f', Direction), param('d', optional(Int)))),
+  // getDown: Method("", fsig(BlockContainerJS)),
+  // getUp: Method("", fsig(BlockContainerJS)),
+  // getNorth: Method("", fsig(BlockContainerJS)),
+  // getSouth: Method("", fsig(BlockContainerJS)),
+  // getWest: Method("", fsig(BlockContainerJS)),
+  // getEast: Method("", fsig(BlockContainerJS)),
+  getBlockState: Method("", fsig(BlockState)),
+  setBlockState: Method("", fsig(Void, param('state', BlockState), param('flags', Int))),
+  getId: Method(""),
+  getTags: Method("", fsig(Collection(ResourceLocation))),
+  hasTag: Method("", fsig(Boolean, param('tag', ResourceLocation))),
+  set: Method("",
+    fsig(Void, param('id', ResourceLocation), param('properties', Map()), param('flags', Int)),
+    fsig(Void, param('id', ResourceLocation), param('properties', Map())),
+    fsig(Void, param('id', ResourceLocation))),
+  getProperties: Method("", fsig(Map(String, String))),
+  getEntity: Method("", fsig(nullable(BlockEntity))),
+  getEntityId: Method("", fsig(String)),
+  getEntityData: Method("", fsig(nullable(CompoundTag))),
+  setEntityData: Method("", fsig(Void, param('tag', nullable(CompoundTag)))),
+  mergeEntityData: Method("", fsig(Void, param('tag', nullable(CompoundTag)))),
+  getLight: Method("", fsig(Int)),
+  getSkyLight: Method("", fsig(Int)),
+  getBlockLight: Method("", fsig(Int)),
+  getCanSeeSky: Method("", fsig(Boolean)),
+  canSeeSkyFromBelowWater: Method("", fsig(Boolean)),
+  toString: Method("", fsig(String)),
+  createExplosion: Method("", fsig(ExplosionJS)),
+  createEntity: Method("", fsig(nullable(Entity), param('type', EntityType))),
+  spawnLightning: Method("",
+    fsig(Void, param('effectOnly', Boolean), param('player', nullable(ServerPlayer))),
+    fsig(Void, param("effectOnly", Boolean)),
+    fsig(Void),
+  ),
+  spawnFireworks: Method("", fsig(Void, param('fireworks', FireworksJS))),
+  getInventory: Method("", fsig(nullable(InventoryKJS), param('facing', nullable(Direction)))),
+  getItem: Method("", fsig(ItemStack)),
+  getDrops: Method("",
+    fsig(List(ItemStack), param('entity', nullable(Entity)), param('heldItem', ItemStack)),
+    fsig(List(ItemStack))
+  ),
+  popItem: Method("", fsig(Void, param('item', ItemStack))),
+  popItemFromFace: Method("", fsig(Void, param('item', ItemStack), param('dir', Direction))),
+  equals: Method("", fsig(Boolean, param('obj', GenericObject))),
+  getPlayersInRadius: Method("", fsig(EntityArrayList, param('radius', nullable(Double)))),
+  getBiomeId: Method("", fsig(ResourceLocation)),
+  specialEquals: Method("", fsig(Boolean, param('obj', GenericObject), param('shallow', Boolean))),
+  getTypeData: Method("", fsig(CompoundTag))
+})
 

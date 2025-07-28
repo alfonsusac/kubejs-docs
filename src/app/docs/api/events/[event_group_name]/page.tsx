@@ -5,16 +5,17 @@ import { CardGridSection } from "@/component/card-grid-lists"
 import { CardDescription, CardLink, CardTitle } from "@/component/card"
 import { prose } from "@/component/prose"
 import { ClientPill, ServerPill, StartupPill } from "../../-components"
+import { isEventHandler } from "../../../../../../content/api/helper"
 
 export default async function DocsAPIEventGroupPage(props: {
   params: Promise<{ event_group_name: string }>
 }) {
   const { event_group_name } = await props.params
 
-  const eventGroup = eventGroups.find(e => e.$name === event_group_name)
+  const eventGroup = eventGroups.find(e => e.$typeName === event_group_name)
   if (!eventGroup) notFound()
 
-  const events = Object.entries(eventGroup.$events)
+  const events = Object.entries(eventGroup.$members)
 
   const currUrl = `/docs/api/events/${ event_group_name }`
 
@@ -41,24 +42,30 @@ export default async function DocsAPIEventGroupPage(props: {
         EventGroupEventsSummary: () => {
           return (
             <prose.ul>
-              {Object.entries(eventGroup.$events).map(([eName, e]) => (
-                <prose.li key={eName}>
-                  <prose.code>.{eName}()</prose.code>: {e.$info}
-                </prose.li>
-              ))}
+              {Object.entries(eventGroup.$members).map(([eName, e]) => {
+                if (!isEventHandler(e)) return null
+                return (
+                  <prose.li key={eName}>
+                    <prose.code>.{eName}()</prose.code>: {e.$info}
+                  </prose.li>
+                )
+              })}
             </prose.ul>
           )
         },
         EventGroupEvents: () => <CardGridSection>
-          {events.map(([eName, e]) => <CardLink key={eName} href={currUrl + '/' + eName}>
-            <CardTitle><prose.code>{eName}</prose.code></CardTitle>
-            <CardDescription>{e.$info}</CardDescription>
-            <div className="flex gap-1 pt-1">
-              {e.$scope.includes('startup') && <StartupPill />}
-              {e.$scope.includes('server') && <ServerPill />}
-              {e.$scope.includes('client') && <ClientPill />}
-            </div>
-          </CardLink>)}
+          {events.map(([eName, e]) => {
+            if (!isEventHandler(e)) return null
+            return <CardLink key={eName} href={currUrl + '/' + eName}>
+              <CardTitle><prose.code>{eName}</prose.code></CardTitle>
+              <CardDescription>{e.$info}</CardDescription>
+              <div className="flex gap-1 pt-1">
+                {e.$scope.includes('startup') && <StartupPill />}
+                {e.$scope.includes('server') && <ServerPill />}
+                {e.$scope.includes('client') && <ClientPill />}
+              </div>
+            </CardLink>
+          })}
         </CardGridSection>
       }}
     />
