@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { Suspense } from "react"
-import { MDX } from "./mdx"
+import { MDX } from "../component/mdx"
 
 export default function Home() {
   return (
@@ -50,22 +50,22 @@ Customize your modpack or server with JavaScript!
 
 ---
 
-### What does this mod do?
+## What does this mod do?
 
 This mod lets you create scripts in JavaScript language to manage your server, add new blocks and items, change recipes, add custom handlers for quest mods and more!
 
 
-### How to use it?
+## How to use it?
 
 Run the game with mod installed once. It should generate a \`kubejs\` folder in your minecraft directory with example scripts and README.txt. Read that!
 
 
-### I don't know JavaScript
+## I don't know JavaScript
 
 There's examples and pre-made scripts here. And you can always ask in discord support channel for help with scripts, but be specific.
 
 
-### Can I reload scripts?
+## Can I reload scripts?
 
 - \`startup_scripts/\`: Restart the game or use \`/kubejs reload startup_scripts\`. Not everything is reloadable - some things require you to restart the game (e.g. registries) or the world (e.g. worldgen).
 
@@ -74,33 +74,33 @@ There's examples and pre-made scripts here. And you can always ask in discord su
 - \`client_scripts/\`: Use \`F3 + T\` to reload scripts and assets or \`/kubejs reload client_scripts\` to reload scripts only
 
 
-### What mod recipes does it support/is mod X supported?
+## What mod recipes does it support/is mod X supported?
 
 If the mod uses datapack recipes, then it's supported by default. Some more complicated mods require addon mods, but in theory, still would work with datapack recipes. See [Editing Recipes]() and [Addons]() sections for more info.
 
 
-### What features does this mod have?
+## What features does this mod have?
 
 See [Tutorials]().
 
 
-### How does this mod work?
+## How does this mod work?
 
 It uses a fork of Rhino, a JavaScript engine by Mozilla to convert JS code to Java classes at runtime. KubeJS wraps minecraft classes and adds utilities to simplify that a lot and remove need for mappings. [Architectury]() lets nearly the same source code be compiled for both Forge and Fabric making porting extremely easy.
 
 
-### Ok, but what if it.. doesn't work?
+## Ok, but what if it.. doesn't work?
 
 You can report issues [here]().
 
 
-### I have more questions / suggestions!
+## I have more questions / suggestions!
 
 If wiki didn't have the answer for what you were looking for, you can join the [Discord server]() and ask for help on [#kubejs-support](${ URLS.supportChannel }) channel!
 
 <DiscordEmbed />
 
-### Links
+## Links
 
 Original KubeJS wiki: [KubeJS Wiki](${ URLS.kubejswiki })
 

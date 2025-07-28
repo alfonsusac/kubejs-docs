@@ -1,0 +1,1 @@
+export type DocsDirectory = {title: string, description: string, content: string}
