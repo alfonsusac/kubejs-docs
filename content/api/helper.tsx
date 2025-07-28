@@ -10,6 +10,18 @@ export function Property(info: string, type: DataType) {
 type Property = ReturnType<typeof Property>
 
 
+export function fsig(returnType: DataType, ...parameters: Param[]) {
+  return {
+    $return: returnType,
+    $params: parameters ?? [],
+  }
+}
+type FunctionSignature = {
+  $return: DataType,
+  $params: Param[],
+}
+
+
 export function Method(info: string, overloads: [returnType: DataType, parameters?: (Param | DataType)[]][]) {
   return {
     $type: "method",
@@ -18,6 +30,23 @@ export function Method(info: string, overloads: [returnType: DataType, parameter
   }
 }
 type Method = ReturnType<typeof Method>
+
+
+
+export function Method2(
+  info: string,
+  ...overloads: FunctionSignature[]
+) {
+  return {
+    $info: info,
+    $overloads: overloads,
+  }
+}
+type Method2 = ReturnType<typeof Method>
+// const myFun = Method2("Foo", fsig(), fsig("string", param(), param()), fsig())
+
+
+
 
 
 export function param(label: string, type: DataType, nullable?: boolean, info?: string) {
