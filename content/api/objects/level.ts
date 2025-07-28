@@ -1,8 +1,18 @@
-import { Method, nullable, Object, param, fsig, Int, Boolean, GenericObject, String, Void, Double } from "../helper"
+import { Method, nullable, param, fsig, Int, Boolean, GenericObject, String, Void, Double, ObjectCategory } from "../helper"
 import { Collection, List, Map } from "../java"
-import { Level, BlockPos, ResourceLocation, Direction, BlockState, BlockEntity, CompoundTag, Entity, EntityType, ServerPlayer, ItemStack, Block } from "../minecraft"
+import { Level, BlockPos, ResourceLocation, Direction, BlockState, BlockEntity, CompoundTag, Entity, EntityType, ServerPlayer, ItemStack, Block, MinecraftServer } from "../minecraft"
 import { ExplosionJS, InventoryKJS } from "./core"
+import { EventJS } from "./event"
 import { EntityArrayList } from "./player"
+
+const Object = ObjectCategory(`/docs/api/objects/level`)
+
+
+// package dev.latvian.mods.kubejs.level;
+export const LevelEventKS = Object("LevelEventJS", {
+  getLevel: Method("", fsig(Level)),
+  getServer: Method("", fsig(nullable(MinecraftServer)))
+}, () => EventJS)
 
 // package dev.latvian.mods.kubejs.level;
 export const FireworksJS = Object("FireworkJS", {

@@ -7,7 +7,6 @@ export type DataType =
   | ObjectType | External | MethodType
   | ThrowType | EnumType | AppliedGenericType
 
-
 // Primitive Types
 
 type String = { $label: "string", $type: "literal" }
@@ -134,43 +133,19 @@ export function isAnonMethodType(x: any): x is MethodType {
   return x?.$type === "method" && Array.isArray(x.$overloads) && typeof x.$info === "string" && x.$methodType === "anonMethod"
 }
 
+
+
 // THE Object type
-
-// part of an object
-// type ObjectProperty = {
-//   $objectMemberType: "property",
-//   $info: string,
-//   $type: DataType,
-// }
-// export function property(info: string, type: DataType): ObjectProperty {
-//   return { $objectMemberType: "property", $info: info, $type: type }
-// }
-
-// type Method = {
-//   $info: string,
-//   $overloads: FunctionSignature[],
-// }
-// Example: const myFun = Method2("Foo", fsig(), fsig("string", param(), param()), fsig())
-
-// export function overloadParam(...p: FunctionParam[]) {
-//   return p
-// }
-// export function fnsig(returnType: DataType, params?: FunctionParam[]) {
-//   return [returnType, params] as Overload
-// }
-// type Overload = [DataType, FunctionParam[]]
-
-
-
-
 
 type ObjectType = {
   $type: "object",
   $info?: string,
   $typeName: string,
-  $implements?: ObjectType | External,
-  $availableAPI: Record<string, DataType>,
+  $implements?: () => ObjectType | External,
+  // $availableAPI: Record<string, DataType>,
+  getAvailableAPI: () => Record<string, DataType>,
   $meta: {
+    $docHref?: string,
     source?: string,
     package?: string,
   }
@@ -185,9 +160,10 @@ export const GenericObject = Object('GenericObject')
 export function Object(
   name: string,
   properties?: Record<string, DataType>,
-  _implements?: ObjectType | External,
+  _implements?: () => ObjectType | External,
   staticprops?: Record<string, DataType>,
   opts?: {
+    $docHref?: string,
     $source?: string,
     $package?: string,
   },
@@ -195,38 +171,10 @@ export function Object(
 ): ObjectType {
 
   // Resolve the implements chain to gather all accessible class members
-  let accessibleClassMembers: Record<string, DataType> = {}
-  let curr = _implements
-  let stack = []
-  while (curr !== undefined) {
-    if ("$implements" in curr && curr.$implements) {
-      stack.push(curr)
-      curr = curr.$implements
-    } else {
-      curr = undefined
-    }
-  }
-  let curr2 = stack.pop()
-  while (curr2) {
-    const { $members } = curr2
-    const childMethods = global.Object.fromEntries(
-      global.Object.entries($members).filter(([mName, mType]) => mType.$type === "method")
-    )
-    // console.log(curr2.$typeName)
-    // console.log("ChildMethodss", global.Object.keys(childMethods))
-    // console.log("accessibleClassMembers", global.Object.keys(childMethods))
-    accessibleClassMembers = {
-      ...accessibleClassMembers,
-      ...childMethods
-    }
-    curr2 = stack.pop()
-  }
+
   // end
 
-  accessibleClassMembers = {
-    ...accessibleClassMembers,
-    ...properties,
-  }
+
 
   // console.log(name)
   // console.log("accessibleClassMemberss", global.Object.keys(accessibleClassMembers))
@@ -235,10 +183,44 @@ export function Object(
     $type: "object",
     $info: info,
     $typeName: name,
-    $availableAPI: accessibleClassMembers,
+    getAvailableAPI: () => {
+      let accessibleClassMembers: Record<string, DataType> = {}
+      let curr = _implements?.()
+      let stack = []
+      while (curr !== undefined) {
+        if ("$implements" in curr && curr.$implements) {
+          stack.push(curr)
+          curr = curr.$implements()
+        } else {
+          curr = undefined
+        }
+      }
+      let curr2 = stack.pop()
+      while (curr2) {
+        const { $members } = curr2
+        const childMethods = global.Object.fromEntries(
+          global.Object.entries($members).filter(([mName, mType]) => mType.$type === "method")
+        )
+        // console.log(curr2.$typeName)
+        // console.log("ChildMethodss", global.Object.keys(childMethods))
+        // console.log("accessibleClassMembers", global.Object.keys(childMethods))
+        accessibleClassMembers = {
+          ...accessibleClassMembers,
+          ...childMethods
+        }
+        curr2 = stack.pop()
+      }
+      accessibleClassMembers = {
+        ...accessibleClassMembers,
+        ...properties,
+      }
+      return accessibleClassMembers
+    },
+    // $availableAPI: accessibleClassMembers,
     $implements: _implements,
     $static: staticprops ?? {},
     $meta: {
+      $docHref: opts?.$docHref,
       source: opts?.$source,
       package: opts?.$package,
     },
@@ -246,7 +228,15 @@ export function Object(
   }
 }
 export function isObjectType(x: any): x is ObjectType { return x?.$type === "object" }
-
+export function ObjectCategory(href: string) {
+  return (...args: Parameters<typeof Object>) => {
+    args[4] = {
+      $docHref: href + `/${ args[0] }`,
+      ...args[4],
+    }
+    return Object(...[...args])
+  }
+}
 
 // ------ external
 

@@ -62,3 +62,13 @@ export function ValueTag() {
     <Pill className="text-sm inline-block">Value</Pill>
   )
 }
+export function PackageTag() {
+  return (
+    <Pill className="text-sm inline-block">Package</Pill>
+  )
+}
+export function ClassTag() {
+  return (
+    <Pill className="text-sm inline-block self-start">Class</Pill>
+  )
+}

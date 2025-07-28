@@ -16,6 +16,7 @@ export function ArticleLayoutTemplate(props: {
           source={props.content.trim()}
           components={props.components}
         />}
+        {props.children}
       </section>
     </div>
   )

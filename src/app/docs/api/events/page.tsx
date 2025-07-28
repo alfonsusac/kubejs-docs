@@ -6,6 +6,16 @@ import { CardDescription, CardLink, CardTitle } from "@/component/card"
 export default function DocsAPIEventsPage() {
   return (
     <ArticleLayoutTemplate
+      components={{
+        EventList: () => <CardGridSection>
+          {eventGroups.map(e => <CardLink key={e.$typeName}
+            href={`/docs/api/events/${ e.$typeName }`}>
+            <CardTitle>{e.$typeName}</CardTitle>
+            <CardDescription>{e.$info}</CardDescription>
+            <CardDescription className="pt-2">{Object.entries(e.$members).length} Events</CardDescription>
+          </CardLink>)}
+        </CardGridSection>
+      }}
       content={`
 
 # Events API
@@ -33,16 +43,6 @@ Scripts go into the \`client_scripts/\` folder. Will be reloaded when you press 
 
 
       `}
-      components={{
-        EventList: () => <CardGridSection>
-          {eventGroups.map(e => <CardLink key={e.$typeName}
-            href={`/docs/api/events/${ e.$typeName }`}>
-            <CardTitle>{e.$typeName}</CardTitle>
-            <CardDescription>{e.$info}</CardDescription>
-            <CardDescription className="pt-2">{Object.entries(e.$members).length} Events</CardDescription>
-          </CardLink>)}
-        </CardGridSection>
-      }}
     />
   )
 }

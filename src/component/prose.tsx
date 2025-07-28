@@ -9,7 +9,7 @@ export const prose = {
   h3: (props: ComponentProps<"h3">) => <h3 {...props} className={cn("text-lg font-semibold tracking-tight mt-10 mb-2 text-foreground/90", props.className)} />,
   ul: (props: ComponentProps<"ul">) => <ul {...props} className={cn("list-disc pl-3 my-8", props.className)} />,
   li: (props: ComponentProps<"li">) => <li {...props} className={cn("list-disc ml-5 mb-3", props.className)} />,
-  code: (props: ComponentProps<"code">) => <code {...props} className={cn("bg-gray-100 dark:bg-zinc-800 text-foreground/90 rounded px-1 py-0.5 text-sm font-mono", props.className)} />,
+  code: (props: ComponentProps<"code">) => <code {...props} className={cn("bg-zinc-800 text-foreground/90 rounded px-1 py-0.5 text-sm font-mono", props.className)} />,
   p: (props: ComponentProps<"p">) => <p {...props} className={cn("my-2 text-foreground/80", props.className)} />,
   a: (props: ComponentProps<"a"> | ComponentProps<typeof Link>) => {
     if (props.href?.toString().startsWith("/"))

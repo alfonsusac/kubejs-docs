@@ -3,7 +3,7 @@ import { eventGroups } from "../../../../../../../content/api/events"
 import { ArticleLayoutTemplate } from "@/component/article"
 import { prose } from "@/component/prose"
 import { isEventHandler, isMethodType, isObjectType } from "../../../../../../../content/api/helper"
-import { RenderMethodOverloads } from "../../../../../../../content/api/helper.display"
+import { RenderMethodOverloads, tokenColors } from "../../../../../../../content/api/helper.display"
 
 export default async function DocsAPIEventGroupEventPage(props: {
   params: Promise<{ event_name: string, event_group_name: string }>
@@ -43,8 +43,6 @@ export default async function DocsAPIEventGroupEventPage(props: {
 
 <EventType />
 
-### Event Object
-
 <EventHandlerEventType />
 
 
@@ -62,12 +60,19 @@ export default async function DocsAPIEventGroupEventPage(props: {
         EventHandlerEventType: () => (
           <>
             <>
-              {Object.entries(eventHandlerEventObject.$availableAPI).map(([name, m], i) => (
+              <prose.h2>
+                <prose.code className="text-xl bg-transparent p-0 font-normal">
+                  <span className={tokenColors.param}>event: </span>
+                  <span className={tokenColors.type}>{eventHandlerEventObject.$typeName}</span>
+                </prose.code>
+              </prose.h2>
+              <prose.p className="pb-3">
+                This is the object that is passed to the event handler function. It contains various properties and methods that can be used to interact with the event.
+              </prose.p>
+              {Object.entries(eventHandlerEventObject.getAvailableAPI()).map(([name, m], i) => (
                 <div key={i} className="my-3">
                   <p>
-                    {
-                      m.$type === 'method' && <RenderMethodOverloads data={m} methodName={name} />
-                    }
+                    {m.$type === 'method' && <RenderMethodOverloads data={m} methodName={name} />}
                   </p>
                   <prose.p className="my-0 ml-4">
                     {m.$type === 'method' && m.$info}

@@ -2,16 +2,19 @@
 
 import { Fragment } from "react"
 import { isAnonMethodType, isExternal, isObjectType, isPrimitiveType, isUnionType, type DataType, type FunctionParam, type FunctionSignature, type MethodType } from "./helper"
+import { prose } from "@/component/prose"
 
 
 // Constants
 
 const TAB_SIZE = 2
 const spaces = (n: number) => new Array(n + 1).join(' ')
-const colors = {
+export const tokenColors = {
   brackets: "text-zinc-500",
   keyword: "text-[#8EAECF]",
-  identifier: "text-[#57A7AB]"
+  identifier: "text-[#57A7AB]",
+  param: "text-[#BCA1BE]",
+  type: "text-[#8FC8AB]!",
 }
 
 function a() { }
@@ -42,15 +45,18 @@ export function RenderDataType(props: { data: DataType, offset?: number }) {
     return <span className="">{data.$name}</span>
   }
   if (isObjectType(data)) {
-    return <span className="">{data.$typeName}</span>
+    const span = <span>{data.$typeName}</span>
+    if (data.$meta.$docHref)
+      return <a href={data.$meta.$docHref} className="underline underline-offset-4 decoration-1 decoration-current/25">{span}</a>
+    return span
   }
   if (isAnonMethodType(data)) {
     return <>
-      <span className={colors.brackets}>(</span>
+      <span className={tokenColors.brackets}>(</span>
       <RenderMethodSignatureParameters
         params={data.$overloads[0].$params}
       />
-      <span className={colors.brackets}>) {'=>'} </span>
+      <span className={tokenColors.brackets}>) {'=>'} </span>
       <RenderDataType data={data.$overloads[0].$return} />
     </>
   }
@@ -67,10 +73,10 @@ export function RenderDataType(props: { data: DataType, offset?: number }) {
 
 export function RenderMethodOverloads(props: {
   data: MethodType,
-  methodName?: string, 
-  offset?: number, 
+  methodName?: string,
+  offset?: number,
   splitLines?: boolean,
-  
+
 }) {
   const m = props.data
   const offset = props.offset ?? 0
