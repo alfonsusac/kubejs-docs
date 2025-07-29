@@ -45,9 +45,7 @@ The following is all code that should be placed inside your recipe callback.
 Shaped recipes are added with the \`event.shaped()\` method. Shaped recipes must have their ingredients in a specific order and shape in order to match the player's input. The arguments to \`event.shaped()\` are:
 
 1. The output item, which can have a count of 1-64
-
 2. An array (max length 3) of crafting table rows, represented as strings (max length 3). Spaces represent slots with no item, and letters represent items. The letters don't have to mean anything; you explain what they mean in the next argument.
-
 3. An object mapping the letters to Items, like \`{letter: item}\`. Input items must have a count of 1.
 
 If you want to force strict positions on the crafting grid or disable mirroring, see Methods of Custom Recipes.
@@ -72,7 +70,6 @@ event.shaped(
 Shapeless recipes are added with the event.shapeless() method. Players can put ingredients of shapeless recipes anywhere on the grid and it will still craft. The arguments to event.shapeless() are:
 
 1. The output item
-
 2. An array of input items. The total input items' count must be 9 at most.
 
 \`\`\`js
@@ -107,11 +104,8 @@ event.smithing(
 Cooking recipes are all very similar, accepting one input (a single item) and giving one output (which can be up to 64 of the same item). The fuel cannot be changed in this recipe event and should be done with tags instead.
 
 - Smelting recipes are added with \`event.smelting()\`, and require the regular Furnace.
-
 - Blasting recipes are added with \`event.blasting()\`, and require the Blast Furnace.
-
 - Smoking recipes are added with \`event.smoking()\`, and require the Smoker.
-
 - Campfire cooking recipes are added with \`event.campfireCooking()\`, and require the Campfire.
 
 XP gained is set by appending \`.xp()\`. Cooking time (in ticks) is set by appending \`.cookingTime()\`. They can also be specified after the input and output.
