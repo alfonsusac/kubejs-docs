@@ -21,6 +21,7 @@ export function MDX(props: { source: string, components?: MDXComponents }) {
         ...props.components,
         Cmd: prose.code,
         Folder: prose.code,
+        Dir: prose.code,
       }}
     />
   )
