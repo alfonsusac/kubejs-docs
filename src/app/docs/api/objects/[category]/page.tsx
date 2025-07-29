@@ -23,11 +23,12 @@ export default async function DocsAPIObjectsCategoryPage(props: {
     <prose.h1>{category}</prose.h1>
 
     <CardGridSection>
-      {Object.entries(pkg).map(([name, value]) => {
+      {Object.entries(pkg).map(([name, valueFn]) => {
+        if (typeof valueFn !== "function") return
+        const value = valueFn()
         if (!isObjectType(value)) return
         return (
           <section key={name}>
-
             <CardLink href={`/docs/api/objects/${ category }/${ name }`}>
               <ClassTag />
               <CardTitle className="mt-0">{name}</CardTitle>

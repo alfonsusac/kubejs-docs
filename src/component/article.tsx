@@ -9,7 +9,7 @@ export function ArticleLayoutTemplate(props: {
   hideBreadcrumb?: boolean
 }) {
   return (
-    <div id="docs_page" className="max-w-2xl mx-auto">
+    <div id="docs_page" className="max-w-2xl mx-auto pb-20">
       <section className="my-10">
         {!props.hideBreadcrumb && <Breadcrumb />}
         {props.content && <MDX

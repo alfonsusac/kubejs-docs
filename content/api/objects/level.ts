@@ -7,27 +7,26 @@ import { EntityArrayList } from "./player"
 
 const Object = ObjectCategory(`/docs/api/objects/level`)
 
-
 // package dev.latvian.mods.kubejs.level;
-export const LevelEventKS = Object("LevelEventJS", {
+export const LevelEventKS = () => Object("LevelEventJS", {
   getLevel: Method("", fsig(Level)),
   getServer: Method("", fsig(nullable(MinecraftServer)))
-}, () => EventJS)
+}, EventJS())
 
 // package dev.latvian.mods.kubejs.level;
-export const FireworksJS = Object("FireworkJS", {
+export const FireworkJS = () => Object("FireworkJS", {
   // TODO
 })
 
 
 // package dev.latvian.mods.kubejs.level;
-export const BlockContainerJS = Object("BlockContainerJS", {
+export const BlockContainerJS = () => Object("BlockContainerJS", {
   minecraftLevel: Level,
   // transient
   cachedState: BlockState,
   cachedEntity: BlockEntity,
   // --
-  clearCache: Method(""),
+  clearCache: Method("", fsig(Void)),
   getLevel: Method("", fsig(Level)),
   getPos: Method("", fsig(BlockPos)),
   getDimension: Method("", fsig(ResourceLocation)),
@@ -43,7 +42,7 @@ export const BlockContainerJS = Object("BlockContainerJS", {
   // getEast: Method("", fsig(BlockContainerJS)),
   getBlockState: Method("", fsig(BlockState)),
   setBlockState: Method("", fsig(Void, param('state', BlockState), param('flags', Int))),
-  getId: Method(""),
+  getId: Method("", fsig(String)),
   getTags: Method("", fsig(Collection(ResourceLocation))),
   hasTag: Method("", fsig(Boolean, param('tag', ResourceLocation))),
   set: Method("",
@@ -62,15 +61,15 @@ export const BlockContainerJS = Object("BlockContainerJS", {
   getCanSeeSky: Method("", fsig(Boolean)),
   canSeeSkyFromBelowWater: Method("", fsig(Boolean)),
   toString: Method("", fsig(String)),
-  createExplosion: Method("", fsig(ExplosionJS)),
+  createExplosion: Method("", fsig(ExplosionJS())),
   createEntity: Method("", fsig(nullable(Entity), param('type', EntityType))),
   spawnLightning: Method("",
     fsig(Void, param('effectOnly', Boolean), param('player', nullable(ServerPlayer))),
     fsig(Void, param("effectOnly", Boolean)),
     fsig(Void),
   ),
-  spawnFireworks: Method("", fsig(Void, param('fireworks', FireworksJS))),
-  getInventory: Method("", fsig(nullable(InventoryKJS), param('facing', nullable(Direction)))),
+  spawnFireworks: Method("", fsig(Void, param('fireworks', FireworkJS()))),
+  getInventory: Method("", fsig(nullable(InventoryKJS()), param('facing', nullable(Direction)))),
   getItem: Method("", fsig(ItemStack)),
   getDrops: Method("",
     fsig(List(ItemStack), param('entity', nullable(Entity)), param('heldItem', ItemStack)),
@@ -79,7 +78,7 @@ export const BlockContainerJS = Object("BlockContainerJS", {
   popItem: Method("", fsig(Void, param('item', ItemStack))),
   popItemFromFace: Method("", fsig(Void, param('item', ItemStack), param('dir', Direction))),
   equals: Method("", fsig(Boolean, param('obj', GenericObject))),
-  getPlayersInRadius: Method("", fsig(EntityArrayList, param('radius', nullable(Double)))),
+  getPlayersInRadius: Method("", fsig(EntityArrayList(), param('radius', nullable(Double)))),
   getBiomeId: Method("", fsig(ResourceLocation)),
   specialEquals: Method("", fsig(Boolean, param('obj', GenericObject), param('shallow', Boolean))),
   getTypeData: Method("", fsig(CompoundTag))

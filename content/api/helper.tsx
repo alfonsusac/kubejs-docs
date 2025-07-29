@@ -7,6 +7,9 @@ export type DataType =
   | ObjectType | External | MethodType
   | ThrowType | EnumType | AppliedGenericType
 
+const t: DataType = {} as DataType
+t.$label
+
 // Primitive Types
 
 type String = { $label: "string", $type: "literal" }
@@ -39,20 +42,18 @@ export const isNull = (x: any): x is Null => x?.$label === "null"
 // const isJavaScriptUndefined = (x: any): x is JavaScriptUndefined =>
 //   x?.$label === "undefined"
 
-type PrimitiveType = String | Int | Void | Boolean | Null
+type PrimitiveType = String | Int | Void | Boolean | Null | Double
   | Double
-export const PrimitiveTypes = [String, Int, Void, Boolean, Null]
+export const PrimitiveTypes = [String, Int, Void, Boolean, Null, Double]
 export const isPrimitiveType = (x: any): x is PrimitiveType =>
-  PrimitiveTypes.some(pt => pt.$label === x?.$label)
-
-
-
+  PrimitiveTypes.some(pt => pt.$label === x?.$label && pt.$type === x?.$type)
 
 // Utility Types
 
-type UnionType = { $type: "union", $args: DataType[] }
+type UnionType = { $type: "union", $args: DataType[], $label: string }
 export function union(...types: DataType[]): UnionType {
   return {
+    $label: types.map(t => t.$label).join(" | "),
     $type: "union",
     $args: types,
   }
@@ -70,23 +71,25 @@ export function nullable(type: DataType): UnionType {
 
 
 
-type ThrowType = { $type: "throw", $args: DataType, }
+type ThrowType = { $type: "throw", $args: DataType, $label: string }
 export function Throw(type: DataType): ThrowType {
-  return { $type: "throw", $args: type, }
+  return { $type: "throw", $args: type, $label: `throw ${ type.$label }` }
 }
 export const isThrowType = (x: any): x is ThrowType =>
   x?.$type === "throw"
 
 type AppliedGenericType = {
   $type: "generic",
+  $label: string,
   $ofType: DataType,
   $genericArgs: string[],
 }
-export function Generic(type: DataType, ...label: string[]): AppliedGenericType {
+export function Generic(type: DataType, ...labels: string[]): AppliedGenericType {
   return {
     $type: "generic",
     $ofType: type,
-    $genericArgs: label,
+    $genericArgs: labels,
+    $label: `${ type.$label }<${ labels.join(", ") }>`
   }
 }
 
@@ -114,12 +117,13 @@ export function fsig(returnType: DataType, ...parameters: FunctionParam[]): Func
 
 export type MethodType = {
   $type: "method",
+  $label: string, // optional label for the method
   $info: string,
   $overloads: FunctionSignature[],
   $methodType: "method" | "anonMethod",
 }
-export function Method(info: string, ...overloads: FunctionSignature[]): MethodType {
-  return { $type: "method", $info: info, $overloads: overloads, $methodType: "method" }
+export function Method(info: string, overload: FunctionSignature, ...overloads: FunctionSignature[]): MethodType {
+  return { $type: "method", $info: info, $overloads: [overload, ...overloads], $methodType: "method", $label: "(func)" }
 }
 export function isMethodType(x: any): x is MethodType {
   return x?.$type === "method" && Array.isArray(x.$overloads) && typeof x.$info === "string"
@@ -127,7 +131,7 @@ export function isMethodType(x: any): x is MethodType {
 
 
 export function AnonMethod(info: string, returnType: FunctionSignature['$return'], ...params: FunctionSignature['$params']): MethodType {
-  return { $type: "method", $info: info, $overloads: [fsig(returnType, ...params)], $methodType: "anonMethod" }
+  return { $type: "method", $info: info, $overloads: [fsig(returnType, ...params)], $methodType: "anonMethod", $label: "(func)" }
 }
 export function isAnonMethodType(x: any): x is MethodType {
   return x?.$type === "method" && Array.isArray(x.$overloads) && typeof x.$info === "string" && x.$methodType === "anonMethod"
@@ -140,8 +144,8 @@ export function isAnonMethodType(x: any): x is MethodType {
 type ObjectType = {
   $type: "object",
   $info?: string,
-  $typeName: string,
-  $implements?: () => ObjectType | External,
+  $label: string,
+  $implements?: ObjectType | External,
   // $availableAPI: Record<string, DataType>,
   getAvailableAPI: () => Record<string, DataType>,
   $meta: {
@@ -160,7 +164,7 @@ export const GenericObject = Object('GenericObject')
 export function Object(
   name: string,
   properties?: Record<string, DataType>,
-  _implements?: () => ObjectType | External,
+  _implements?: ObjectType | External | null,
   staticprops?: Record<string, DataType>,
   opts?: {
     $docHref?: string,
@@ -182,15 +186,15 @@ export function Object(
   return {
     $type: "object",
     $info: info,
-    $typeName: name,
+    $label: name,
     getAvailableAPI: () => {
       let accessibleClassMembers: Record<string, DataType> = {}
-      let curr = _implements?.()
+      let curr = _implements
       let stack = []
-      while (curr !== undefined) {
+      while (curr) {
         if ("$implements" in curr && curr.$implements) {
           stack.push(curr)
-          curr = curr.$implements()
+          curr = curr.$implements
         } else {
           curr = undefined
         }
@@ -217,7 +221,7 @@ export function Object(
       return accessibleClassMembers
     },
     // $availableAPI: accessibleClassMembers,
-    $implements: _implements,
+    $implements: _implements ?? undefined,
     $static: staticprops ?? {},
     $meta: {
       $docHref: opts?.$docHref,
@@ -242,11 +246,11 @@ export function ObjectCategory(href: string) {
 
 type External = {
   $type: "external",
-  $name: string,
+  $label: string,
   $fqn: string,
 }
 export function External(name: string, fullQualifiedName: string): External {
-  return { $type: "external", $name: name, $fqn: fullQualifiedName }
+  return { $type: "external", $label: name, $fqn: fullQualifiedName }
 }
 export function isExternal(x: any): x is External { return x?.$type === "external" }
 
@@ -256,6 +260,7 @@ type ExternalGeneric = (...args: DataType[]) => {
   $name: string,
   $fqn: string,
   $genericArgs: DataType[],
+  $label: string,
 }
 export function ExternalGeneric(name: string, fullQualifiedName: string): ExternalGeneric {
   return (...args: DataType[]) => ({
@@ -263,6 +268,7 @@ export function ExternalGeneric(name: string, fullQualifiedName: string): Extern
     $name: name,
     $fqn: fullQualifiedName,
     $genericArgs: args,
+    $label: `${ name }<${ args.map(a => a.$label).join(", ") }>`
   })
 }
 
@@ -307,11 +313,14 @@ export function EventHandler(
 
 
   if (eventTargetType) {
+    const firstFsig = fsig(Void, param(eventTargetType[0].$label, eventTargetType[0].$type), param('eventHandler', eventHandlerType))
+    const restFsig = eventTargetType.slice(1).map(e => fsig(Void, param(e.$label, e.$type), param('eventHandler', eventHandlerType)))
     return {
       $scope: scope,
       ...Method(
         info,
-        ...eventTargetType.map(e => fsig(Void, param(e.$label, e.$type), param('eventHandler', eventHandlerType))),
+        firstFsig,
+        ...restFsig,
       )
     }
   }
@@ -335,6 +344,7 @@ export function EventGroup(
     $package: "todo",
   }, info)
 }
+export type EventGroup = ReturnType<typeof EventGroup>
 
 
 

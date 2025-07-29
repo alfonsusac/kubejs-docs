@@ -3,6 +3,7 @@ import { Block, BlockItem, BlockState, Direction, Entity, ItemStack, Level, Play
 import { EntityEventJS } from "../objects/entity"
 import { BlockContainerJS } from "../objects/level"
 import { PlayerEventJS } from "../objects/player"
+import { EventGroupPage } from "./+helper"
 
 
 const SUPPORTS_BLOCK_TARGET_PARAM = [
@@ -17,12 +18,12 @@ const BlockBrokenEventJS = Object("BlockBrokenEventJS", {
   getEntity: Method("The player that broke the block.", fsig(ServerPlayer)),
   getBlock: Method("The block that was broken.", fsig(Object("BlockContainerJS (anon subclass)", {
     getBlockState: Method("Gets the state of the block in the context of block breaks", fsig(BlockState))
-  }, () => BlockContainerJS, {}, {
-    $docHref: BlockContainerJS.$meta.$docHref,
+  }, BlockContainerJS(), {}, {
+    $docHref: BlockContainerJS().$meta.$docHref,
   }))),
   getXp: Method("The block that was broken.", fsig(Int)),
   setXp: Method("Sets the experience dropped by the block. Only works on Forge.", fsig(Void, param('xp', Int))),
-}, () => PlayerEventJS)
+}, PlayerEventJS())
 
 const BROKEN = EventHandler(
   "Invoked when a block is destroyed by a player.",
@@ -39,8 +40,8 @@ const BlockPlacedEventJS = Object("BlockBrokenEventJS", {
   getEntity: Method("The entity that placed the block.", fsig(Entity)),
   getBlock: Method("The block that is placed.", fsig(Object("BlockContainerJS (anon subclass)", {
     getBlockState: Method("Gets the state of the block in the context of block placement", fsig(BlockState))
-  }, () => BlockContainerJS))),
-}, () => EntityEventJS)
+  }, BlockContainerJS()))),
+}, EntityEventJS())
 
 const PLACED = EventHandler(
   "Invoked when a block is placed.",
@@ -54,10 +55,10 @@ const PLACED = EventHandler(
 
 const BlockLeftClickedEventJS = Object("BlockLeftClickedEventJS", {
   getEntity: Method("The entity that placed the block.", fsig(Player)),
-  getBlock: Method("The block that was left clicked.", fsig(BlockContainerJS)),
+  getBlock: Method("The block that was left clicked.", fsig(BlockContainerJS())),
   getItem: Method("The item that was used to left click the block.", fsig(ItemStack)),
   getFacing: Method("The face of the block that was left clicked.", fsig(nullable(Direction)))
-}, () => PlayerEventJS)
+}, PlayerEventJS())
 
 const LEFT_CLICKED = EventHandler(
   "Invoked when a player left clicks on a block.",
@@ -81,3 +82,10 @@ export const BlockEvents = EventGroup("BlockEvents", "Events related to blocks",
   // detectorUnpowered: 0,
   // farmlandTrampled: 0,
 })
+
+export const BlockEventPage = EventGroupPage(
+  "Block Events",
+  "Events related to blocks, such as block breaks, placements, and interactions.",
+  "",
+  BlockEvents,
+)

@@ -25,18 +25,18 @@ const EventResult = Object("EventResult", {
 })
 EventResult.$members.PASS = EventResult
 
-export const EventExit = Object("EventExit", {
+export const EventExit = () => Object("EventExit", {
   result: EventResult
-}, () => Exception)
+}, Exception)
 
-export const EventJS = Object("EventJS", {
+export const EventJS = () => Object("EventJS", {
   cancel: Method(`Cancels the event with default exit value. Execution will be stopped **immediately**.
 					
-		\`cancel\` denotes a \`false\` outcome.`, fsig(Throw(EventExit), param('value', nullable(GenericObject)))),
+		\`cancel\` denotes a \`false\` outcome.`, fsig(Throw(EventExit()), param('value', nullable(GenericObject)))),
   success: Method(`Stops the event with default exit value. Execution will be stopped **immediately**.
 					
-		\`success\` denotes a \`true\` outcome.`, fsig(Throw(EventExit), param('value', nullable(GenericObject)))),
+		\`success\` denotes a \`true\` outcome.`, fsig(Throw(EventExit()), param('value', nullable(GenericObject)))),
   exit: Method(`Stops the event with default exit value. Execution will be stopped **immediately**.
 					
-		\`exit\` denotes a \`default\` outcome.`, fsig(Throw(EventExit), param('value', nullable(GenericObject))))
+		\`exit\` denotes a \`default\` outcome.`, fsig(Throw(EventExit()), param('value', nullable(GenericObject))))
 })

@@ -8,9 +8,9 @@ export default function DocsAPIEventsPage() {
     <ArticleLayoutTemplate
       components={{
         EventList: () => <CardGridSection>
-          {eventGroups.map(e => <CardLink key={e.$typeName}
-            href={`/docs/api/events/${ e.$typeName }`}>
-            <CardTitle>{e.$typeName}</CardTitle>
+          {eventGroups.map(e => <CardLink key={e.$label}
+            href={`/docs/api/events/${ e.$label }`}>
+            <CardTitle>{e.$label}</CardTitle>
             <CardDescription>{e.$info}</CardDescription>
             <CardDescription className="pt-2">{Object.entries(e.$members).length} Events</CardDescription>
           </CardLink>)}

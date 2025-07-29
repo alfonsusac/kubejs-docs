@@ -6,12 +6,12 @@ const Object = ObjectCategory(`/docs/api/objects/entity`)
 
 
 
-export const EntityEventJS = Object("EntityEventJS", {
+export const EntityEventJS = () => Object("EntityEventJS", {
   getEntity: Method("", fsig(Entity)),
   getPlayer: Method("", fsig(nullable(Player))),
   getLevel: Method("", fsig(Level)),
-}, () => LevelEventKS)
+}, LevelEventKS())
 
-export const LivingEntityEventJS = Object("LivingEntityEventJS", {
+export const LivingEntityEventJS = () => Object("LivingEntityEventJS", {
   getEntity: Method("", fsig(Entity)),
-}, () => EntityEventJS)
+}, EntityEventJS())

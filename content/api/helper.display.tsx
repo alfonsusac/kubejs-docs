@@ -28,9 +28,11 @@ function a() { }
 
 export function RenderDataType(props: { data: DataType, offset?: number }) {
   const data = props.data
+
   if (isPrimitiveType(data)) {
     return <span className="">{data.$label}</span>
   }
+
   if (isUnionType(data)) {
     return <>
       {data.$args.map((arg, i) => {
@@ -41,15 +43,18 @@ export function RenderDataType(props: { data: DataType, offset?: number }) {
       })}
     </>
   }
+
   if (isExternal(data)) {
-    return <span className="">{data.$name}</span>
+    return <span className="">{data.$label}</span>
   }
+
   if (isObjectType(data)) {
-    const span = <span>{data.$typeName}</span>
+    const span = <span>{data.$label}</span>
     if (data.$meta.$docHref)
       return <a href={data.$meta.$docHref} className="underline underline-offset-4 decoration-1 decoration-current/25">{span}</a>
     return span
   }
+
   if (isAnonMethodType(data)) {
     return <>
       <span className={tokenColors.brackets}>(</span>
@@ -62,7 +67,7 @@ export function RenderDataType(props: { data: DataType, offset?: number }) {
   }
 
 
-  return `[${ data.$type }]`
+  return `[${ data.$type } ${ data.$label }]`
 }
 
 
@@ -76,7 +81,7 @@ export function RenderMethodOverloads(props: {
   methodName?: string,
   offset?: number,
   splitLines?: boolean,
-
+  useSingleNewLine?: boolean
 }) {
   const m = props.data
   const offset = props.offset ?? 0
@@ -95,7 +100,7 @@ export function RenderMethodOverloads(props: {
       </span>{props.splitLines && <br />}
       <span>)</span>
       <span>{':'} </span>
-      <span className="text-[#8FC8AB]!"><RenderDataType data={o.$return} /></span>{i < m.$overloads.length - 1 && '\n\n'}
+      <span className="text-[#8FC8AB]!"><RenderDataType data={o.$return} /></span>{i < m.$overloads.length - 1 && (props.useSingleNewLine ? `\n` : '\n\n')}
     </span>)
   }</>
 }

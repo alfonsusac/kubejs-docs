@@ -12,7 +12,7 @@ export default async function DocsAPIEventGroupPage(props: {
 }) {
   const { event_group_name } = await props.params
 
-  const eventGroup = eventGroups.find(e => e.$typeName === event_group_name)
+  const eventGroup = eventGroups.find(e => e.$label === event_group_name)
   if (!eventGroup) notFound()
 
   const events = Object.entries(eventGroup.$members)

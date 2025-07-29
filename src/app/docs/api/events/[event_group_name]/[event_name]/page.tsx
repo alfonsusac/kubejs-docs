@@ -10,7 +10,7 @@ export default async function DocsAPIEventGroupEventPage(props: {
 }) {
   const { event_name, event_group_name } = await props.params
 
-  const eventGroup = eventGroups.find(e => e.$typeName === event_group_name)
+  const eventGroup = eventGroups.find(e => e.$label === event_group_name)
   if (!eventGroup) notFound()
 
 
@@ -63,7 +63,7 @@ export default async function DocsAPIEventGroupEventPage(props: {
               <prose.h2>
                 <prose.code className="text-xl bg-transparent p-0 font-normal">
                   <span className={tokenColors.param}>event: </span>
-                  <span className={tokenColors.type}>{eventHandlerEventObject.$typeName}</span>
+                  <span className={tokenColors.type}>{eventHandlerEventObject.$label}</span>
                 </prose.code>
               </prose.h2>
               <prose.p className="pb-3">

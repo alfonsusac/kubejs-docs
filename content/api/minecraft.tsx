@@ -1,6 +1,7 @@
 import { External } from "./helper"
 
-export const Level = External("Level"                      , "net.minecraft.world.level.Level")
+export const Level = External("Level", "net.minecraft.world.level.Level")
+export const ExplosionInteraction = External("ExplosionInteraction", "net.minecraft.world.level.ExplosionInteraction")
 export const Direction = External("Direction"              , "net.minecraft.core.Direction")
 export const BlockPos = External("BlockPos"                , "net.minecraft.core.BlockPos")
 
