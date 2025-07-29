@@ -28,7 +28,7 @@ export function MDX(props: { source: string, components?: MDXComponents }) {
 
 function Warn(props: { children: React.ReactNode }) {
   return (
-    <div className="p-1 px-6 bg-orange-500/15 rounded-md flex gap-4">
+    <div className="p-1 px-5 bg-orange-500/15 rounded-md flex gap-4">
       <prose.p className="shrink-0">
         ⚠️
       </prose.p>
