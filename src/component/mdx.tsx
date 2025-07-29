@@ -9,6 +9,8 @@ import { fromMarkdown } from "mdast-util-from-markdown"
 import { visit } from 'unist-util-visit'
 import { codeToHtml } from "shiki"
 import { ScriptTarget } from "typescript"
+import { Tab, Tabs } from "./tabs"
+import type { ComponentProps } from "react"
 
 
 
@@ -17,8 +19,10 @@ export async function MDX(props: { source: string, components?: MDXComponents })
 
   let source = props.source
 
+  source = source.replaceAll('<CodeTab>', '<CodeTab>\n')
+
   // Extract Code Blocks
-  const md = props.source
+  const md = source
   const tree = fromMarkdown(md)
   const blocks: { code: string, lang: string, meta: string }[] = []
   visit(tree, 'code', (node) => {
@@ -57,12 +61,11 @@ export async function MDX(props: { source: string, components?: MDXComponents })
     })
 
     // Patch <pre>
+    // bg - #2e3440ff
     const patchedHtml = html.replaceAll(
       'shiki nord',
-      'shiki nord my-4 p-4 bg-gray-100 dark:bg-[#323843] rounded overflow-x-auto overflow-y-visible text-sm leading-tight tracking-tight [&_code]:bg-transparent'
+      'shiki nord my-4 p-4 bg-[#2e3440] rounded overflow-x-auto overflow-y-visible text-sm leading-tight tracking-tight [&_code]:bg-transparent'
     )
-
-    // console.log(patchedHtml)
 
     const codeBlockId = Math.random().toString(36).substring(2, 15)
     htmlMap.set(codeBlockId, patchedHtml)
@@ -70,7 +73,7 @@ export async function MDX(props: { source: string, components?: MDXComponents })
     // Replace the code block in the source with the highlighted HTML
     source = source.replace(
       `\`\`\`${ lang }${ block.meta ? ` ${ block.meta }` : '' }\n${ code }\n\`\`\``,
-      `<RawHTML id="${ codeBlockId }" />`
+      `<RawHTML id="${ codeBlockId }"></RawHTML>`
     )
   }
 
@@ -92,13 +95,16 @@ export async function MDX(props: { source: string, components?: MDXComponents })
         ...props.components,
         RawHTML: (props: { id: string }) => {
           const html = htmlMap.get(props.id)
-          if (!html) {
+          if (!html)
             return <div >{props.id}</div>
-          }
-          return (
-            <div dangerouslySetInnerHTML={{ __html: html }} />
-          )
-        }
+          return <div dangerouslySetInnerHTML={{ __html: html }} />
+        },
+        CodeTabs: (props: ComponentProps<typeof Tabs>) =>
+          <Tabs className="bg-[#2e3440] rounded-md" {...props} />,
+        CodeTab: (props: ComponentProps<typeof Tab>) =>
+          <Tab className="bg-[#2e3440] rounded-md [&_pre]:my-0" {...props} />,
+        Tabs: Tabs,
+        Tab: Tab,
       }}
     />
   )

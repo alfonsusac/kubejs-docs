@@ -10,9 +10,9 @@ export const prose = {
   h1: (props: ComponentProps<"h1">) =>
     <h1 {...props} className={cn("text-4xl font-semibold tracking-tight", props.className)} />,
   h2: (props: ComponentProps<"h2">) =>
-    <h2 {...props} className={cn("text-2xl font-semibold tracking-tight mt-12 mb-2 text-foreground/90", props.className)} />,
+    <h2 {...props} className={cn("text-2xl font-semibold tracking-tight mt-12 mb-4 text-foreground/90", props.className)} />,
   h3: (props: ComponentProps<"h3">) =>
-    <h3 {...props} className={cn("text-lg font-semibold tracking-tight mt-10 mb-2 text-foreground/90", props.className)} />,
+    <h3 {...props} className={cn("text-lg font-semibold tracking-tight mt-8 mb-4 text-foreground/90", props.className)} />,
   ul: (props: ComponentProps<"ul">) =>
     <ul {...props} className={cn("list-disc pl-6 my-8 in-[li]:my-3 in-[li]:pl-3", props.className)} />,
   ol: (props: ComponentProps<"ol">) =>
@@ -29,7 +29,8 @@ export const prose = {
     return <a {...props} className={cn("text-blue-400 hover:underline", props.className)} target="_blank" href={props.href?.toString()} />
   },
   pre: (props: ComponentProps<"pre">) =>
-    <pre {...props} className={cn("my-4 p-4 bg-gray-100 dark:bg-[#323843] rounded overflow-x-auto text-sm leading-tight tracking-tight [&_code]:bg-transparent", props.className)} />,
+    // <pre {...props} className={cn("my-4 p-4 bg-[#323843] rounded overflow-x-auto text-sm leading-tight tracking-tight [&_code]:bg-transparent", props.className)} />,
+    <pre {...props} className={cn("my-4 p-4 bg-zinc-800 rounded overflow-x-auto text-sm leading-tight tracking-tight [&_code]:bg-transparent", props.className)} />,
 
   table: (props: ComponentProps<"table">) =>
     <table {...props} className={cn("w-full my-4 border-separate border-spacing-0 text-sm bg-zinc-900 rounded-lg border border-zinc-800", props.className)} />,

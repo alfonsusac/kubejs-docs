@@ -12,15 +12,18 @@ Any script that modifies recipes should be placed in the <Folder>server_scripts/
 
 Any modifications to the recipes should be done within the context of a \`recipes\` event. This means that we need to register an "event listener" for the \`ServerEvents.recipes\` event, and give it some code to execute whenever the game is ready to modify recipes. Here's how we tell KubeJS to execute some code whenever it's recipe time:
 
+
+<CodeTabs items={['1.19.2+', '1.18.2']}>
+<CodeTab>
 \`\`\`js
-/* 
+/*
  * ServerEvents.recipes(callback) is a function that accepts another function,
- * called the "callback", as a parameter. The callback gets run when the 
+ * called the "callback", as a parameter. The callback gets run when the
  * server is working on recipes, and then we can make our own changes.
- * When the callback runs, it is also known as the event "firing". 
+ * When the callback runs, it is also known as the event "firing".
 */
 
-// Listen for the "recipes" server event. // [\!code ++]
+// Listen for the "recipes" server event.
 ServerEvents.recipes(event => {
   // You can replace \`event\` with any name you like, as
   // long as you change it inside the callback too!
@@ -32,6 +35,31 @@ ServerEvents.recipes(event => {
   console.log('Hello! The recipe event has fired!')
 })
 \`\`\`
+</CodeTab>
+<CodeTab>
+\`\`\`js
+/*
+ * onEvent('recipes', callback) is a function that accepts another function,
+ * called the "callback", as a parameter. The callback gets run when the
+ * server is working on recipes, and then we can make our own changes.
+ * When the callback runs, it is also known as the event "firing".
+*/
+
+// Listen for the "recipes" server event.
+onEvent('recipes', event => {
+  // You can replace \`event\` with any name you like, as
+  // long as you change it inside the callback too!
+
+  // This part, inside the curly braces, is the callback.
+  // You can modify as many recipes as you like in here,
+  // without needing to use ServerEvents.recipes() again.
+
+  console.log('Hello! The recipe event has fired!')
+})
+\`\`\`
+</CodeTab>
+</CodeTabs>
+
 
 In the next sections, you can see what to put inside your callback.
 
@@ -95,6 +123,8 @@ Smithing recipes have 2 or 3 inputs (depending on the minecraft version, see bel
 1.20+
 1.19.2 and below
 
+<CodeTabs items={['1.20+', '1.19.2 and below']}>
+<CodeTab>
 \`\`\`js
 event.smithing(
   'minecraft:netherite_ingot',                     // arg 1: output
@@ -103,6 +133,17 @@ event.smithing(
   'minecraft:black_dye'                            // arg 4: the upgrade item
 )
 \`\`\`
+</CodeTab>
+<CodeTab>
+\`\`\`js
+event.smithing(
+  'minecraft:netherite_ingot',  // arg 1: output
+  'minecraft:iron_ingot',       // arg 2: the item to be upgraded
+  'minecraft:black_dye'         // arg 3: the upgrade item
+)
+\`\`\`
+</CodeTab>
+</CodeTabs>
 
 ### Smelting & Cooking
 
@@ -271,7 +312,7 @@ ServerEvents.recipes(event => {
 })
 \`\`\`
 
-## Looping
+### Looping
 
 In addition to helper functions, you can also loop through an array to perform an action on every item in the array.
 
