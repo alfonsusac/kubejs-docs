@@ -21,9 +21,8 @@ export default async function DocsGuideSlugPage(props: {
       break
     }
     if (collections[slug]) {
-      page = collections[slug as keyof typeof collections]
+      page = collections[slug]
       // Get next and previous pages
-      // AI wrote this
       const keys = Object.keys(collections)
       const index = keys.indexOf(slug)
       if (index > 0) {
@@ -37,6 +36,7 @@ export default async function DocsGuideSlugPage(props: {
         nextPage = null
       }
     }
+
   }
 
   if (!page) return (

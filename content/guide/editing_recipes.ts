@@ -13,7 +13,6 @@ Any script that modifies recipes should be placed in the <Folder>server_scripts/
 Any modifications to the recipes should be done within the context of a \`recipes\` event. This means that we need to register an "event listener" for the \`ServerEvents.recipes\` event, and give it some code to execute whenever the game is ready to modify recipes. Here's how we tell KubeJS to execute some code whenever it's recipe time:
 
 \`\`\`js
-1.19.2+
 /* 
  * ServerEvents.recipes(callback) is a function that accepts another function,
  * called the "callback", as a parameter. The callback gets run when the 
@@ -21,7 +20,7 @@ Any modifications to the recipes should be done within the context of a \`recipe
  * When the callback runs, it is also known as the event "firing". 
 */
 
-// Listen for the "recipes" server event.
+// Listen for the "recipes" server event. // [\!code ++]
 ServerEvents.recipes(event => {
   // You can replace \`event\` with any name you like, as
   // long as you change it inside the callback too!
@@ -51,6 +50,9 @@ Shaped recipes are added with the \`event.shaped()\` method. Shaped recipes must
 If you want to force strict positions on the crafting grid or disable mirroring, see Methods of Custom Recipes.
 
 \`\`\`js
+import {$RecipesEventJS} from "packages/dev/latvian/mods/kubejs/recipe/$RecipesEventJS"
+declare const event: $RecipesEventJS
+// ---cut---
 event.shaped(
   Item.of('minecraft:stone', 3), // arg 1: output
   [
@@ -65,6 +67,9 @@ event.shaped(
   }
 )
 \`\`\`
+
+
+
 ### Shapeless
 
 Shapeless recipes are added with the event.shapeless() method. Players can put ingredients of shapeless recipes anywhere on the grid and it will still craft. The arguments to event.shapeless() are:
