@@ -1,3 +1,4 @@
+import { editing_recipes } from "./editing_recipes"
 import { getting_started } from "./getting_started"
 
 export const tutorial = {
@@ -5,6 +6,7 @@ export const tutorial = {
   $subtitle: "Learn how to use KubeJS",
   $collection: {
     getting_started,
+    editing_recipes,
   },
 }
 
