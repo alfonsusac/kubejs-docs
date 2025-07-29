@@ -1,18 +1,22 @@
 import { ArticleLayoutTemplate } from "@/component/article"
 import { CardGridSection } from "@/component/card-grid-lists"
-import { eventGroups } from "../../../../../content/api/events"
+// import { eventGroups } from "../../../../../content/api/events"
 import { CardDescription, CardLink, CardTitle } from "@/component/card"
+import { eventGroups } from "../../../../../content/api/events/+index"
 
 export default function DocsAPIEventsPage() {
+
+  const groups = Object.entries(eventGroups.$collection)
+
   return (
     <ArticleLayoutTemplate
       components={{
         EventList: () => <CardGridSection>
-          {eventGroups.map(e => <CardLink key={e.$label}
-            href={`/docs/api/events/${ e.$label }`}>
-            <CardTitle>{e.$label}</CardTitle>
-            <CardDescription>{e.$info}</CardDescription>
-            <CardDescription className="pt-2">{Object.entries(e.$members).length} Events</CardDescription>
+          {groups.map(([name, eventGroup]) => <CardLink key={name}
+            href={`/docs/api/events/${ name }`}>
+            <CardTitle>{name}</CardTitle>
+            <CardDescription>{eventGroup.$subtitle}</CardDescription>
+            <CardDescription className="pt-2">{Object.entries(eventGroup.$events).length} Events</CardDescription>
           </CardLink>)}
         </CardGridSection>
       }}

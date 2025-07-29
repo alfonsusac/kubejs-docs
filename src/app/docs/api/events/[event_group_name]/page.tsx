@@ -1,21 +1,23 @@
 import { ArticleLayoutTemplate } from "@/component/article"
-import { eventGroups } from "../../../../../../content/api/events"
 import { notFound } from "next/navigation"
 import { CardGridSection } from "@/component/card-grid-lists"
 import { CardDescription, CardLink, CardTitle } from "@/component/card"
 import { prose } from "@/component/prose"
 import { ClientPill, ServerPill, StartupPill } from "../../-components"
 import { isEventHandler } from "../../../../../../content/api/helper"
+import { eventGroups } from "../../../../../../content/api/events/+index"
 
 export default async function DocsAPIEventGroupPage(props: {
   params: Promise<{ event_group_name: string }>
 }) {
   const { event_group_name } = await props.params
+  
+  const eventGroup = eventGroups.$collection[event_group_name as keyof typeof eventGroups.$collection]
+  if (!eventGroup) {
+    notFound()
+  }
 
-  const eventGroup = eventGroups.find(e => e.$label === event_group_name)
-  if (!eventGroup) notFound()
-
-  const events = Object.entries(eventGroup.$members)
+  const events = Object.entries(eventGroup.$events)
 
   const currUrl = `/docs/api/events/${ event_group_name }`
 
@@ -38,11 +40,11 @@ export default async function DocsAPIEventGroupPage(props: {
         `}
       components={{
         EventGroupName: () => event_group_name,
-        EventGroupInfo: () => <prose.p>{eventGroup.$info}</prose.p>,
+        EventGroupInfo: () => <prose.p>{eventGroup.$subtitle}</prose.p>,
         EventGroupEventsSummary: () => {
           return (
             <prose.ul>
-              {Object.entries(eventGroup.$members).map(([eName, e]) => {
+              {Object.entries(eventGroup.$events).map(([eName, e]) => {
                 if (!isEventHandler(e)) return null
                 return (
                   <prose.li key={eName}>

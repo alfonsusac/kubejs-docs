@@ -1,21 +1,21 @@
 import { notFound } from "next/navigation"
-import { eventGroups } from "../../../../../../../content/api/events"
 import { ArticleLayoutTemplate } from "@/component/article"
 import { prose } from "@/component/prose"
 import { isEventHandler, isMethodType, isObjectType } from "../../../../../../../content/api/helper"
 import { RenderMethodOverloads, tokenColors } from "../../../../../../../content/api/helper.display"
+import { eventGroups } from "../../../../../../../content/api/events/+index"
 
 export default async function DocsAPIEventGroupEventPage(props: {
   params: Promise<{ event_name: string, event_group_name: string }>
 }) {
   const { event_name, event_group_name } = await props.params
 
-  const eventGroup = eventGroups.find(e => e.$label === event_group_name)
-  if (!eventGroup) notFound()
+  const eventGroup = eventGroups.$collection[event_group_name as keyof typeof eventGroups.$collection]
+  if (!eventGroup) {
+    notFound()
+  }
 
-
-
-  const event = eventGroup.$members[event_name]
+  const event = eventGroup.$events[event_name]
   if (!event) notFound()
 
   if (!isEventHandler(event))
