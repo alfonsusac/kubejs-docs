@@ -72,7 +72,7 @@ event.shaped(
 
 ### Shapeless
 
-Shapeless recipes are added with the event.shapeless() method. Players can put ingredients of shapeless recipes anywhere on the grid and it will still craft. The arguments to event.shapeless() are:
+Shapeless recipes are added with the \`event.shapeless()\` method. Players can put ingredients of shapeless recipes anywhere on the grid and it will still craft. The arguments to \`event.shapeless()\` are:
 
 1. The output item
 2. An array of input items. The total input items' count must be 9 at most.
@@ -90,7 +90,7 @@ event.shapeless(
 
 ### Smithing
 
-Smithing recipes have 2 or 3 inputs (depending on the minecraft version, see below) and one output and are added with the event.smithing() method. Smithing recipes are crafted in the smithing table.
+Smithing recipes have 2 or 3 inputs (depending on the minecraft version, see below) and one output and are added with the \`event.smithing()\` method. Smithing recipes are crafted in the smithing table.
 
 1.20+
 1.19.2 and below
@@ -140,7 +140,7 @@ event.stonecutting('3x minecraft:stick', '#minecraft:planks')
 
 ### Custom/Modded JSON recipes
 
-If a mod supports Datapack recipes, you can add recipes for it without any addon mod support! Unfortunately, we can't give specific advice because every mod's layout is different, but if a mod has a GitHub (most do!) or other source code, you can find the relevant JSON files in <Dir> /src/generated/resources/data/&lt;modname>/recipes/ </Dir>. Otherwise, you may be able to find it by unzipping the mod's .jar file.
+If a mod supports Datapack recipes, you can add recipes for it without any addon mod support! Unfortunately, we can't give specific advice because every mod's layout is different, but if a mod has a GitHub (most do!) or other source code, you can find the relevant JSON files in <Dir> /src/generated/resources/data/&lt;modname>/recipes/</Dir>. Otherwise, you may be able to find it by unzipping the mod's .jar file.
 
 Here's an example of adding a Farmer's Delight cutting board recipe, which defines an input, output, and tool taken straight from [their GitHub](https://github.com/vectorwing/FarmersDelight/blob/1.18.2/src/generated/resources/data/farmersdelight/recipes/cutting/cake.json). Obviously, you can substitute any of the items here to make your own recipe!
 
