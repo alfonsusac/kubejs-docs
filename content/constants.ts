@@ -1,0 +1,1 @@
+export const LatvianDiscordInvite = "https://discord.gg/lat";

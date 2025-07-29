@@ -19,6 +19,8 @@ export function MDX(props: { source: string, components?: MDXComponents }) {
         FunctionTag: FunctionTag,
         ValueTag: ValueTag,
         ...props.components,
+        Cmd: prose.code,
+        Folder: prose.code,
       }}
     />
   )
@@ -26,8 +28,13 @@ export function MDX(props: { source: string, components?: MDXComponents }) {
 
 function Warn(props: { children: React.ReactNode }) {
   return (
-    <div className="p-1 px-4 bg-orange-500/10 border-orange-500/25 border">
-      {props.children}
+    <div className="p-1 px-6 bg-orange-500/15 rounded-md flex gap-4">
+      <prose.p className="shrink-0">
+        ⚠️
+      </prose.p>
+      <div>
+        {props.children}
+      </div>
     </div>
   )
 }

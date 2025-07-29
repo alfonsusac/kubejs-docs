@@ -18,7 +18,7 @@ function SubSection(title: string, href: string, description?: string) {
 
 export const docs_structure = [
   Section("Getting Started", [
-    SubSection("Tutorials", "/docs/tutorials", "A collection of tutorials to help you get started with KubeJS."),
+    SubSection("Tutorials", "/docs/guide", "A collection of tutorials to help you get started with KubeJS."),
     SubSection("Tips", "/docs/tips", "A collection of tips and tricks to help you use KubeJS effectively."),
     SubSection("Folder Structure", "/docs/folder-structure", "Learn about the folder structure of /kubejs."),
     SubSection("Addons", "/docs/addons", "All KubeJS mod integrations"),
