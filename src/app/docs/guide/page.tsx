@@ -9,7 +9,7 @@ export default function DocsGuidePage() {
       <prose.h1>{tutorial.$title}</prose.h1>
       <prose.p>{tutorial.$subtitle}</prose.p>
 
-      <section className="mt-8">
+      <section className="mt-8 flex flex-col gap-2">
         {Object.entries(tutorial.$collection).map(([slug, tutorial]) => (
           <CardLink href={`/docs/guide/${ slug }`} key={slug}>
             <CardTitle key={tutorial.$title}>{tutorial.$title}</CardTitle>
