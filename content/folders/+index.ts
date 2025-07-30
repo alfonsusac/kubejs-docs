@@ -76,10 +76,6 @@ export const folders = {
       $content: `
       The startup_scripts folder contains scripts which are used for things which require a full game restart.
       
-
-
-
-      
       They're used for:
       - registering items/blocks
       - modifying existing items/blocks

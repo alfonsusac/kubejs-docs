@@ -1,5 +1,5 @@
-import type { Page } from "../../guide/+index"
 import type { EventGroup } from "../helper"
+import type { Page } from "../helper.page"
 
 export function EventGroupPage(
   title: string,

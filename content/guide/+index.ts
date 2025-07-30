@@ -1,3 +1,4 @@
+import type { Page } from "../api/helper.page"
 import { editing_recipes } from "./editing_recipes"
 import { getting_started } from "./getting_started"
 
@@ -23,13 +24,5 @@ export function Tutorial(
     $content: content,
   }
 }
-
-
 export type Tutorial = ReturnType<typeof Tutorial>
 
-export type Page = {
-  $title: string,
-  $subtitle: string,
-  $content?: string,
-  $collection?: Record<string, Page>,
-} & Record<string, any>

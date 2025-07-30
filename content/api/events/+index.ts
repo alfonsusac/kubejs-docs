@@ -1,4 +1,4 @@
-import { Page } from "../../guide/+index"
+import type { Page } from "../helper.page"
 import { BlockEventPage } from "./BlockEvents"
 
 export const eventGroups = {
