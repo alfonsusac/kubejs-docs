@@ -2,7 +2,6 @@ import { article, ArticleLayoutTemplate } from "@/component/article"
 import { folders } from "../../../../../content/folders/+index"
 import { prose } from "@/component/prose"
 import { MDX } from "@/component/mdx"
-import { CardDescription, CardLink, CardTitle } from "@/component/card"
 
 export default async function DocsFolderStructureSlugsPage(props: {
   params: Promise<{ slugs: string[] }>
