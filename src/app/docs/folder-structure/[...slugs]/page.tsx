@@ -29,7 +29,6 @@ export default async function DocsFolderStructureSlugsPage(props: {
         href={`/docs/folder-structure/`}
       />
 
-
     </ArticleLayoutTemplate>
   )
 
