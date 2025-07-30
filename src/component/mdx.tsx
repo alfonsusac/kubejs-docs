@@ -92,6 +92,7 @@ export async function MDX(props: { source: string, components?: MDXComponents })
         Cmd: prose.code,
         Folder: prose.code,
         Dir: prose.code,
+        Kbd: prose.code,
         ...props.components,
         RawHTML: (props: { id: string }) => {
           const html = htmlMap.get(props.id)
