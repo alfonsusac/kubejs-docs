@@ -77,9 +77,7 @@ export default async function DocsGuideSlugPage(props: {
             : <div></div>
         }
       </div>
-
       <prose.hr />
-
       <section className="text-sm text-foreground/50">
         {/* Get Data from GitHub */}
         <p>

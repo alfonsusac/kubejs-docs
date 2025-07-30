@@ -1,11 +1,12 @@
-import type { Page } from "@/lib/docs/docs2"
+import { StandalonePage, type Page } from "@/lib/docs/docs2"
 
 
-export const folders = {
-  $title: "Folders",
-  $subtitle: "KubeJS Folders",
-  $content: "",
-  $collection: {
+export const FolderStructurePage = StandalonePage(
+  "/docs/folder-structure",
+  "Folder Structure",
+  "Learn about the folder structure of /kubejs.",
+  ``,
+  {
     assets: {
       $title: "/assets",
       $subtitle: "The assets folder",
@@ -86,5 +87,5 @@ export const folders = {
       You can reload all code inside of this folder by restarting the game, or you can reload all code outside of any event listeners by running /kubejs reload startup_scripts.`
     },
 
-  },
-} satisfies Page
+  }
+)

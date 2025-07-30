@@ -1,13 +1,15 @@
 import { article, ArticleLayoutTemplate } from "@/component/article"
-import { folders } from "../../../../../content/folders/+index"
 import { prose } from "@/component/prose"
 import { MDX } from "@/component/mdx"
+import { FolderStructurePage } from "../../../../../content/folders/+index"
 
 export default async function DocsFolderStructureSlugsPage(props: {
   params: Promise<{ slugs: string[] }>
 }) {
   const { slugs } = await props.params
   const slug1 = slugs[0] as keyof typeof folders.$collection
+
+  const folders = FolderStructurePage
   const folder = folders.$collection[slug1]
   if (!folder) {
     throw new Error(`Folder ${ slug1 } does not exist.`)
@@ -23,12 +25,10 @@ export default async function DocsFolderStructureSlugsPage(props: {
       <MDX
         source={folder.$content}
       />
-
       <article.PrevNext
         data={prevNext}
         href={`/docs/folder-structure/`}
       />
-
     </ArticleLayoutTemplate>
   )
 

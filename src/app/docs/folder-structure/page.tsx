@@ -1,10 +1,12 @@
 import { ArticleLayoutTemplate } from "@/component/article"
-import { folders } from "../../../../content/folders/+index"
+// import { folders } from "../../../../content/folders/+index"
 import { prose } from "@/component/prose"
 import { CardDescription, CardLink, CardTitle } from "@/component/card"
+import { FolderStructurePage } from "../../../../content/folders/+index"
 
 export default function DocsFolderStructurePage() { 
 
+  const folders = FolderStructurePage
 
   return (
     <ArticleLayoutTemplate>
