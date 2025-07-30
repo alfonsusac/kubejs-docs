@@ -1,6 +1,6 @@
 import { article } from "@/component/article"
 import { notFound } from "next/navigation"
-import { eventGroupsPage } from "../../../../../../content/api/events/+index"
+import { EventGroupsPage } from "../../../../../../content/api/events/+index"
 import { MDX } from "@/component/mdx"
 
 export default async function DocsAPIEventGroupPage(props: {
@@ -8,7 +8,7 @@ export default async function DocsAPIEventGroupPage(props: {
 }) {
   const { event_group_name } = await props.params
 
-  const eventGroupPage = eventGroupsPage.$collection?.events[event_group_name as keyof typeof eventGroupsPage.$collection.events]
+  const eventGroupPage = EventGroupsPage.$collection?.events[event_group_name as keyof typeof EventGroupsPage.$collection.events]
   if (!eventGroupPage) {
     notFound()
   }

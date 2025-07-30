@@ -7,7 +7,7 @@ const eventGroups = {
   BlockEvents: BlockEventPage
 }
 
-export const eventGroupsPage = StandalonePage(
+export const EventGroupsPage = StandalonePage(
   "/docs/api/events",
   "Events",
   "List of all events that KubeJS supports.",

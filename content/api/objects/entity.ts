@@ -4,8 +4,6 @@ import { LevelEventKS } from "./level"
 
 const Object = ObjectCategory(`/docs/api/objects/entity`)
 
-
-
 export const EntityEventJS = () => Object("EntityEventJS", {
   getEntity: Method("", fsig(Entity)),
   getPlayer: Method("", fsig(nullable(Player))),

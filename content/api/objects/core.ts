@@ -1,9 +1,8 @@
-import { Boolean, Double, External, fsig, Method, ObjectCategory, param, union, Void } from "../helper"
+import { Boolean, Double, fsig, Method, ObjectCategory, param, union, Void } from "../helper"
 import { Entity, ExplosionInteraction } from "../minecraft"
 
 const Object = ObjectCategory(`/docs/api/objects/core`)
 
-// package dev.latvian.mods.kubejs.core;
 export const ExplosionJS = () => {
   const thisRef = Object("ExplosionJS", {
     x: Double,
@@ -13,7 +12,7 @@ export const ExplosionJS = () => {
       fsig(Void)
     ),
   }, null, {}, {
-    $package: "dev.latvian.mods.kubejs.level"
+    $package: "dev.latvian.mods.kubejs.core"
   })
   thisRef.$members.exploder = union(
     Entity,

@@ -2,7 +2,6 @@
 
 import { Fragment } from "react"
 import { isAnonMethodType, isExternal, isObjectType, isPrimitiveType, isUnionType, type DataType, type FunctionParam, type FunctionSignature, type MethodType } from "./helper"
-import { prose } from "@/component/prose"
 
 
 // Constants
@@ -16,11 +15,6 @@ export const tokenColors = {
   param: "text-[#BCA1BE]",
   type: "text-[#8FC8AB]!",
 }
-
-function a() { }
-
-
-
 
 
 

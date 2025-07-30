@@ -1,5 +1,5 @@
 import { PageGroup, StandalonePage } from "@/lib/docs/docs2"
-import { eventGroupsPage } from "./api/events/+index"
+import { EventGroupsPage } from "./api/events/+index"
 
 export const docs_structure = [
   PageGroup("Getting Started", [
@@ -10,9 +10,10 @@ export const docs_structure = [
     StandalonePage("/docs/tooling", "Tooling", "Tools to help you develop KubeJS scripts."),
   ]),
   PageGroup("References", [
-    eventGroupsPage,
+    EventGroupsPage,
     StandalonePage("/docs/api/objects", "Objects", "List of all objects that KubeJS supports."),
     StandalonePage("/docs/api/datapack", "Data Pack"),
     StandalonePage("/docs/api/commands", "Commands"),
   ]),
 ]
+

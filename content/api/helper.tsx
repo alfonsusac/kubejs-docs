@@ -8,7 +8,6 @@ export type DataType =
   | ThrowType | EnumType | AppliedGenericType
 
 const t: DataType = {} as DataType
-t.$label
 
 // Primitive Types
 
@@ -36,12 +35,6 @@ type Null = { $label: "null", $type: "literal" }
 export const Null: Null = { $label: "null", $type: "literal" }
 export const isNull = (x: any): x is Null => x?.$label === "null"
 
-// Only used in optional parameters
-// type JavaScriptUndefined = { $label: "undefined", $type: "literal" }
-// const JavaScriptUndefined: JavaScriptUndefined = { $label: "undefined", $type: "literal" }
-// const isJavaScriptUndefined = (x: any): x is JavaScriptUndefined =>
-//   x?.$label === "undefined"
-
 type PrimitiveType = String | Int | Void | Boolean | Null | Double
   | Double
 export const PrimitiveTypes = [String, Int, Void, Boolean, Null, Double]
@@ -65,9 +58,6 @@ export const isUnionType = (x: any): x is UnionType =>
 export function nullable(type: DataType): UnionType {
   return union(type, Null)
 }
-// export function optional(type: DataType): UnionType {
-//   return union(type, JavaScriptUndefined)
-// }
 
 
 
@@ -205,9 +195,6 @@ export function Object(
         const childMethods = global.Object.fromEntries(
           global.Object.entries($members).filter(([mName, mType]) => mType.$type === "method")
         )
-        // console.log(curr2.$typeName)
-        // console.log("ChildMethodss", global.Object.keys(childMethods))
-        // console.log("accessibleClassMembers", global.Object.keys(childMethods))
         accessibleClassMembers = {
           ...accessibleClassMembers,
           ...childMethods
