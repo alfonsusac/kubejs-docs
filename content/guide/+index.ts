@@ -1,16 +1,29 @@
-import type { Page } from "@/lib/docs/docs2"
+import { StandalonePage, type Page } from "@/lib/docs/docs2"
 import { editing_recipes } from "./editing_recipes"
 import { getting_started } from "./getting_started"
+import { editing_tags } from "./editing_tags"
 
-export const tutorial = {
-  $title: "KubeJS Guide",
-  $subtitle: "Learn how to use KubeJS",
-  $content: "",
-  $collection: {
+export const TutorialPage = StandalonePage(
+  "/docs/guide",
+  "Guides",
+  "A collection of tutorials to help you get started with KubeJS.",
+  ``,
+  {
     getting_started,
     editing_recipes,
-  },
-} satisfies Page
+    editing_tags,
+  }
+)
+
+// export const tutorial = {
+//   $title: "KubeJS Guide",
+//   $subtitle: "Learn how to use KubeJS",
+//   $content: "",
+//   $collection: {
+//     getting_started,
+//     editing_recipes,
+//   },
+// } satisfies Page
 
 
 export function Tutorial(
@@ -18,11 +31,11 @@ export function Tutorial(
   description: string,
   content: string = "",
 ) {
-  return {
-    $title: title,
-    $subtitle: description,
-    $content: content,
-  }
+  return StandalonePage(
+    `/docs/guide/${title.toLowerCase().replace(/\s+/g, "-")}`,
+    title,
+    description,
+    content,
+  )
 }
-export type Tutorial = ReturnType<typeof Tutorial>
 

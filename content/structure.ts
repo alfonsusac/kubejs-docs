@@ -7,7 +7,6 @@ export const docs_structure = [
     StandalonePage("/docs/guide", "Tutorials", "A collection of tutorials to help you get started with KubeJS."),
     StandalonePage("/docs/tips", "Tips", "A collection of tips and tricks to help you use KubeJS effectively."),
     FolderStructurePage,
-    // StandalonePage("/docs/folder-structure", "Folder Structure", "Learn about the folder structure of /kubejs."),
     StandalonePage("/docs/addons", "Addons", "All KubeJS mod integrations"),
     StandalonePage("/docs/tooling", "Tooling", "Tools to help you develop KubeJS scripts."),
   ]),

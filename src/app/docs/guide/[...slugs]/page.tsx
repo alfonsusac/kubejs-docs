@@ -1,16 +1,16 @@
 import { ArticleLayoutTemplate } from "@/component/article"
 import { prose } from "@/component/prose"
-import { tutorial } from "../../../../../content/guide/+index"
 import { MDX } from "@/component/mdx"
 import { CardDescription, CardLink, CardTitle } from "@/component/card"
 import type { Page } from "@/lib/docs/docs2"
+import { TutorialPage } from "../../../../../content/guide/+index"
 
 export default async function DocsGuideSlugPage(props: {
   params: Promise<{ slugs: string[] }>
 }) {
   const { slugs } = await props.params
 
-  const index = tutorial
+  const index = TutorialPage
   let page: Page | null = index
   let nextPage: { page: Page, slug: string } | null = null
   let prevPage: { page: Page, slug: string } | null = null
