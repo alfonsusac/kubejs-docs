@@ -1,8 +1,9 @@
 import { ArticleLayoutTemplate } from "@/component/article"
 import { prose } from "@/component/prose"
-import { tutorial, type Page } from "../../../../../content/guide/+index"
+import { tutorial } from "../../../../../content/guide/+index"
 import { MDX } from "@/component/mdx"
 import { CardDescription, CardLink, CardTitle } from "@/component/card"
+import type { Page } from "../../../../../content/api/helper.page"
 
 export default async function DocsGuideSlugPage(props: {
   params: Promise<{ slugs: string[] }>
@@ -55,20 +56,28 @@ export default async function DocsGuideSlugPage(props: {
       <prose.hr></prose.hr>
       <MDX source={page.$content ?? ""} />
       <div className="my-12 grid grid-cols-2 gap-4">
+        {
+          prevPage ?
+            <CardLink href={`/docs/guide/${ prevPage?.slug }`}>
+              <CardTitle>Previous</CardTitle>
+              <CardDescription>
+                {prevPage ? prevPage.page.$title : "No previous page"}
+              </CardDescription>
+            </CardLink>
+            : <div></div>
 
-        <CardLink href={`/docs/guide/${ prevPage?.slug }`}>
-          <CardTitle>Previous</CardTitle>
-          <CardDescription>
-            {prevPage ? prevPage.page.$title : "No previous page"}
-          </CardDescription>
-        </CardLink>
+        }
+        {
+          nextPage ?
+            <CardLink href={`/docs/guide/${ nextPage?.slug }`}>
+              <CardTitle>Next</CardTitle>
+              <CardDescription>
+                {nextPage ? nextPage.page.$title : "No next page"}
+              </CardDescription>
+            </CardLink>
+            : <div></div>
+        }
 
-        <CardLink href={`/docs/guide/${ nextPage?.slug }`}>
-          <CardTitle>Next</CardTitle>
-          <CardDescription>
-            {nextPage ? nextPage.page.$title : "No next page"}
-          </CardDescription>
-        </CardLink>
 
       </div>
 
