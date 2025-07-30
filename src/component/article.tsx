@@ -25,6 +25,8 @@ export function ArticleLayoutTemplate(props: {
   )
 }
 
+// Prev Next ----------------------------------------
+
 function getPrevNextPage(slug: string, collection: Record<string, any>) {
   const keys = Object.keys(collection)
   const index = keys.indexOf(slug)
@@ -43,40 +45,67 @@ function getPrevNextPage(slug: string, collection: Record<string, any>) {
   return { nextPage, prevPage }
 }
 
+function PrevNext(props: {
+  data: ReturnType<typeof getPrevNextPage>,
+  href: string
+}) {
+  const { nextPage, prevPage } = props.data
+  return (
+    <div className="my-12 grid grid-cols-2 gap-4">
+      {
+        prevPage ?
+          <CardLink href={`${ props.href }${ prevPage?.slug }`}>
+            <CardDescription>Previous</CardDescription>
+            <CardTitle>
+              {prevPage ? prevPage.page.$title : "No previous page"}
+            </CardTitle>
+          </CardLink>
+          : <div></div>
+
+      }
+      {
+        nextPage ?
+          <CardLink href={`${ props.href }${ nextPage?.slug }`}>
+            <CardDescription>Next</CardDescription>
+            <CardTitle>
+              {nextPage ? nextPage.page.$title : "No next page"}
+            </CardTitle>
+          </CardLink>
+          : <div></div>
+      }
+    </div>
+  )
+}
+
+// (end) Prev Next ----------------------------------------
+
+
+// Slug Traversal  ----------------------------------------
+
+function traverseSlug<E, R1, R2>(
+  slugs: string[],
+  entry: E,
+  accessor: (e: E, slug: string) => R1 | undefined
+) {
+  let result: any 
+
+  for (const slug of slugs) {
+    result = accessor(entry, slug)
+    if (result !== undefined) {
+      entry = result
+    } else {
+      return undefined
+    }
+  }
+
+}
+
+
+
+
 
 export const article = {
   layout: ArticleLayoutTemplate,
   getPrevNext: getPrevNextPage,
-  PrevNext: function PrevNext(props: {
-    data: ReturnType<typeof getPrevNextPage>,
-    href: string
-  }) {
-    const { nextPage, prevPage } = props.data
-    return (
-      <div className="my-12 grid grid-cols-2 gap-4">
-        {
-          prevPage ?
-            <CardLink href={`${ props.href }${ prevPage?.slug }`}>
-              <CardDescription>Previous</CardDescription>
-              <CardTitle>
-                {prevPage ? prevPage.page.$title : "No previous page"}
-              </CardTitle>
-            </CardLink>
-            : <div></div>
-
-        }
-        {
-          nextPage ?
-            <CardLink href={`${ props.href }${ nextPage?.slug }`}>
-              <CardDescription>Next</CardDescription>
-              <CardTitle>
-                {nextPage ? nextPage.page.$title : "No next page"}
-              </CardTitle>
-            </CardLink>
-            : <div></div>
-        }
-      </div>
-    )
-  }
-
+  PrevNext,
 }

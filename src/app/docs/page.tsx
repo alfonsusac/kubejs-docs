@@ -1,4 +1,4 @@
-import { docs_structure } from "./structure"
+import { docs_structure } from "../../../content/structure"
 import { ArticleLayoutTemplate } from "@/component/article"
 import { CardGridSectionList } from "@/component/card-grid-lists"
 

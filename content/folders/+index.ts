@@ -1,4 +1,5 @@
-import type { Page } from "../api/helper.page"
+import type { Page } from "@/lib/docs/docs2"
+
 
 export const folders = {
   $title: "Folders",

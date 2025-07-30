@@ -3,7 +3,7 @@ import { Block, BlockItem, BlockState, Direction, Entity, ItemStack, Level, Play
 import { EntityEventJS } from "../objects/entity"
 import { BlockContainerJS } from "../objects/level"
 import { PlayerEventJS } from "../objects/player"
-import { EventGroupPage } from "./+helper"
+import { EventGroupPage } from "./+template"
 
 
 const SUPPORTS_BLOCK_TARGET_PARAM = [
@@ -72,20 +72,18 @@ const LEFT_CLICKED = EventHandler(
 
 
 export const BlockEvents = EventGroup("BlockEvents", "Events related to blocks", {
-  // modification: undefined,
-  // rightClicked: undefined,
+  // modification: ,
+  // rightClicked: ,
   leftClicked: LEFT_CLICKED,
   placed: PLACED,
   broken: BROKEN,
-  // detectorChanged: 0,
-  // detectorPowered: 0,
-  // detectorUnpowered: 0,
-  // farmlandTrampled: 0,
+  // detectorChanged: ,
+  // detectorPowered: ,
+  // detectorUnpowered: ,
+  // farmlandTrampled: ,
 })
 
 export const BlockEventPage = EventGroupPage(
-  "Block Events",
-  "Events related to blocks, such as block breaks, placements, and interactions.",
-  "",
   BlockEvents,
+  ``
 )

@@ -3,7 +3,7 @@ import { prose } from "@/component/prose"
 import { tutorial } from "../../../../../content/guide/+index"
 import { MDX } from "@/component/mdx"
 import { CardDescription, CardLink, CardTitle } from "@/component/card"
-import type { Page } from "../../../../../content/api/helper.page"
+import type { Page } from "@/lib/docs/docs2"
 
 export default async function DocsGuideSlugPage(props: {
   params: Promise<{ slugs: string[] }>
@@ -65,7 +65,6 @@ export default async function DocsGuideSlugPage(props: {
               </CardDescription>
             </CardLink>
             : <div></div>
-
         }
         {
           nextPage ?
@@ -77,8 +76,6 @@ export default async function DocsGuideSlugPage(props: {
             </CardLink>
             : <div></div>
         }
-
-
       </div>
 
       <prose.hr />
