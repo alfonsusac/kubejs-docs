@@ -1,12 +1,12 @@
 import { StandalonePage, type Page } from "@/lib/docs/docs2"
 
 
-export const FolderStructurePage = StandalonePage(
-  "/docs/folder-structure",
-  "Folder Structure",
-  "Learn about the folder structure of /kubejs.",
-  ``,
-  {
+export const FolderStructurePage = StandalonePage({
+  href: "/docs/folder-structure",
+  title: "Folder Structure",
+  subtitle: "Learn about the folder structure of /kubejs.",
+  content: ``,
+  collection: {
     assets: {
       $title: "/assets",
       $subtitle: "The assets folder",
@@ -88,4 +88,4 @@ export const FolderStructurePage = StandalonePage(
     },
 
   }
-)
+})

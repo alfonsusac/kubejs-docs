@@ -22,21 +22,22 @@ export function PageGroup(title: string, content: StandalonePage[]) {
 
 export type StandalonePage = ReturnType<typeof StandalonePage>
 
-export function StandalonePage<T = {}>(
+export function StandalonePage<T = {}>(opts: {
   href: string,
   title: string,
-  description?: string,
+  subtitle?: string,
   content?: string,
   collection?: T,
-  components?: MDXComponents
-) {
+  components?: MDXComponents,
+  indexFn?: (collection: T) => {}[]
+}) {
   return {
-    $title: title,
-    $href: href,
-    $subtitle: description || "",
-    $content: content || "",
-    $collection: (collection ?? {}) as T,
-    $components: components
+    $title: opts.title,
+    $href: opts.href,
+    $subtitle: opts.subtitle || "",
+    $content: opts.content || "",
+    $collection: (opts.collection ?? {}) as T,
+    $components: opts.components,
   }
 }
 
@@ -44,15 +45,15 @@ export function CreateTemplatedPage(components?: MDXComponents) {
   return <T,>(
     href: string,
     title: string,
-    description?: string,
+    subtitle?: string,
     content?: string,
     collection?: T,
-  ) => StandalonePage(
+  ) => StandalonePage({
     href,
     title,
-    description,
+    subtitle,
     content,
     collection,
     components,
-  )
+  })
 }

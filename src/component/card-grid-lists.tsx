@@ -14,7 +14,7 @@ export function CardGridSectionList(props: {
         <div key={index} className="flex flex-col gap-2">
           <h2 className="text-xl font-medium mb-2">{section.title}</h2>
           <CardGridSection>
-            {section.items.map(subitem => <CardLink key={subitem.$title} href={subitem.$href}>
+            {section.items.map((subitem, index) => <CardLink key={index} href={subitem.$href}>
               <CardTitle>{subitem.$title}</CardTitle>
               <CardDescription>{subitem.$subtitle}</CardDescription>
             </CardLink>)}

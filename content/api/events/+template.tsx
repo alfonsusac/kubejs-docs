@@ -10,11 +10,11 @@ export function EventGroupPage(
   eventGroup: EventGroup,
   content: string,
 ) {
-  return StandalonePage(
-    `/docs/api/events/${ eventGroup.$label }`,
-    eventGroup.$label,
-    eventGroup.$info,
-    `
+  return StandalonePage({
+    href: `/docs/api/events/${ eventGroup.$label }`,
+    title: eventGroup.$label,
+    subtitle: eventGroup.$info,
+    content: `
     <ObjectTag/>
     # <EventGroupName />
 
@@ -28,10 +28,10 @@ export function EventGroupPage(
 
     <EventGroupEvents />
     `,
-    {
+    collection: {
       events: eventGroup.$members,
     },
-    {
+    components: {
       EventGroupName: () => eventGroup.$label,
       EventGroupInfo: () => <prose.p>{eventGroup.$info}</prose.p>,
       EventGroupEventsSummary: () => {
@@ -63,6 +63,5 @@ export function EventGroupPage(
         })}
       </CardGridSection>
     }
-
-  )
+  })
 }

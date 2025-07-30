@@ -4,16 +4,16 @@ import { FolderStructurePage } from "./folders/+index"
 
 export const docs_structure = [
   PageGroup("Getting Started", [
-    StandalonePage("/docs/guide", "Tutorials", "A collection of tutorials to help you get started with KubeJS."),
-    StandalonePage("/docs/tips", "Tips", "A collection of tips and tricks to help you use KubeJS effectively."),
+    StandalonePage({ href: "/docs/guide", title: "Tutorials", subtitle: "A collection of tutorials to help you get started with KubeJS." }),
+    StandalonePage({ href: "/docs/tips", title: "Tips", subtitle: "A collection of tips and tricks to help you use KubeJS effectively." }),
     FolderStructurePage,
-    StandalonePage("/docs/addons", "Addons", "All KubeJS mod integrations"),
-    StandalonePage("/docs/tooling", "Tooling", "Tools to help you develop KubeJS scripts."),
+    StandalonePage({ href: "/docs/addons", title: "Addons", subtitle: "All KubeJS mod integrations" }),
+    StandalonePage({ href: "/docs/tooling", title: "Tooling", subtitle: "Tools to help you develop KubeJS scripts." }),
   ]),
   PageGroup("References", [
     EventGroupsPage,
-    StandalonePage("/docs/api/objects", "Objects", "List of all objects that KubeJS supports."),
-    StandalonePage("/docs/api/datapack", "Data Pack"),
-    StandalonePage("/docs/api/commands", "Commands"),
+    StandalonePage({ href: "/docs/api/objects", title: "Objects", subtitle: "List of all objects that KubeJS supports." }),
+    StandalonePage({ href: "/docs/api/datapack", title: "Data Pack" }),
+    StandalonePage({ href: "/docs/api/commands", title: "Commands" }),
   ]),
 ]

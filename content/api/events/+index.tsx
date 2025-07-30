@@ -7,13 +7,12 @@ const eventGroups = {
   BlockEvents: BlockEventPage
 }
 
-export const EventGroupsPage = StandalonePage(
-  "/docs/api/events",
-  "Events",
-  "List of all events that KubeJS supports.",
-  `
+export const EventGroupsPage = StandalonePage({
+  href: "/docs/api/events",
+  title: "Events",
+  subtitle: "List of all events that KubeJS supports.",
+  content: `
   <EventGroupList />
-
 
   ## Event Types
 
@@ -32,10 +31,10 @@ export const EventGroupsPage = StandalonePage(
   Scripts go into the \`client_scripts/\` folder. Will be reloaded when you press \`F3+T\`. Most changes that are per-client (such as resource packs, Painter, and JEI) are client events.
 
   `,
-  {
+  collection: {
     events: eventGroups,
   },
-  {
+  components: {
     EventGroupList: () => <CardGridSection>
       {Object.entries(eventGroups).map(([name, eventGroup]) => <CardLink key={name}
         href={`/docs/api/events/${ name }`}>
@@ -45,6 +44,6 @@ export const EventGroupsPage = StandalonePage(
       </CardLink>)}
     </CardGridSection>
   }
-)
+})
 
 

@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
 import { cn } from "lazy-cn"
 import Link from "next/link"
+import { Document } from "flexsearch"
+import { docs_structure } from "../../content/structure"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,11 +21,25 @@ export const metadata: Metadata = {
   description: "An unofficial wiki for KubeJS, a modding framework for Minecraft.",
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+
+  // Build search index
+  const index = new Document({
+    document: {
+      id: "id",
+      index: ["title", "subtitle", "content"],
+      store: ["title", "href", "subtitle"],
+    }
+  })
+
+  const flatPages = docs_structure.flat
+
+
+
   return (
     <html lang="en">
 
