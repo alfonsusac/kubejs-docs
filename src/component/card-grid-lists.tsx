@@ -1,29 +1,47 @@
-import type { StandalonePage } from "@/lib/docs/docs2"
+import type { ComponentProps } from "react"
 import { CardDescription, CardLink, CardTitle } from "./card"
+import type { Page } from "@/lib/docs/docs3"
+import { cn } from "lazy-cn"
 
 export function CardGridSectionList(props: {
   data: {
-    title: string,
-    subtitle?: string,
-    items: StandalonePage[]
-  }[]
+    sectionTitle: string,
+    items: Page[],
+  }[],
 }) {
   return (
-    <div className="flex flex-col gap-12 my-12">
+    <SectionGroupList>
       {props.data.map((section, index) =>
-        <div key={index} className="flex flex-col gap-2">
-          <h2 className="text-xl font-medium mb-2">{section.title}</h2>
+
+        <SectionGroup key={index}>
+          <SectionTitle>{section.sectionTitle}</SectionTitle>
           <CardGridSection>
-            {section.items.map((subitem, index) => <CardLink key={index} href={subitem.$href}>
-              <CardTitle>{subitem.$title}</CardTitle>
-              <CardDescription>{subitem.$subtitle}</CardDescription>
-            </CardLink>)}
+
+            {section.items.map((subitem, index) =>
+              <CardLink key={index} href={subitem.$meta._$href}>
+                <CardTitle>{subitem.$title}</CardTitle>
+                <CardDescription>{subitem.$subtitle}</CardDescription>
+              </CardLink>
+            )}
+
           </CardGridSection>
-        </div>
+        </SectionGroup>
+
       )}
-    </div>
+    </SectionGroupList>
   )
 }
+
+function SectionGroupList(props: ComponentProps<"div">) {
+  return <div {...props} className={cn('flex flex-col gap-12 my-12', props.className)} />
+}
+function SectionGroup(props: ComponentProps<"div">) {
+  return <div {...props} className={cn('flex flex-col gap-2', props.className)} />
+}
+function SectionTitle(props: ComponentProps<"h2">) {
+  return <h2 {...props} className={cn('text-xl font-medium mb-2', props.className)} />
+}
+
 
 export function CardGridSection<T>(props: {
   children?: React.ReactNode,

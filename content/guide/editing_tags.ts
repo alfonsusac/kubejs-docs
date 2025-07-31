@@ -1,9 +1,9 @@
-import { Tutorial } from "./+index"
+import { TutorialPage } from "./+template"
 
-export const editing_tags = Tutorial(
-  'Editing Tags',
-  'Adding, removing, and modifying tags',
-  `
+export const editing_tags = TutorialPage({
+  title: 'Editing Tags',
+  subtitle: 'Adding, removing, and modifying tags',
+  content: `
   <Warn>
   Tags are per item/block/fluid/entity_type and as such cannot be added based on things like NBT data!
   </Warn>
@@ -53,4 +53,4 @@ ServerEvents.tags('block', event => {
 })
 \`\`\`
   `
-)
+})

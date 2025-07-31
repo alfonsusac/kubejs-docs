@@ -1,9 +1,9 @@
-import { Tutorial } from "./+index"
+import { TutorialPage } from "./+template"
 
-export const editing_recipes = Tutorial(
-  "Editing Recipes",
-  "Adding, removing, and modifying recipes",
-  `
+export const editing_recipes = TutorialPage({
+  title: "Editing Recipes",
+  subtitle: "Adding, removing, and modifying recipes",
+  content: `
 ## Recipes, Callbacks, and You
 
 The recipe event can be used to add, remove, or replace recipes.
@@ -317,4 +317,4 @@ ServerEvents.recipes(event => {
 In addition to helper functions, you can also loop through an array to perform an action on every item in the array.
 
   `
-)
+})

@@ -1,26 +1,17 @@
-import { docs_structure } from "../../../content/structure"
-import { ArticleLayoutTemplate } from "@/component/article"
-import { CardGridSectionList } from "@/component/card-grid-lists"
+import { docs_structure2 } from "../../../content/structure"
+import { article } from "@/component/article"
+import { MDX } from "@/component/mdx"
+import { resolveDocsHref } from "@/lib/docs/docs3"
 
 export default function DocsIndexPage() {
+
+  resolveDocsHref('/docs', docs_structure2)
   return (
-    <ArticleLayoutTemplate
-      hideBreadcrumb
-      content={`
-  
-# Index
-
-Collection of links to various documentation pages and resources related to KubeJS.
-
----
-
-<ArticleLists />
-
-`}
-      components={{
-        ArticleLists:
-          () => <CardGridSectionList data={docs_structure} />
-      }}
-    />
+    <article.layout>
+      <MDX
+        source={docs_structure2.$content || ""}
+        components={docs_structure2.$components({ currPath: "/docs", })}
+      />
+    </article.layout>
   )
 }

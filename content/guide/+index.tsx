@@ -11,9 +11,9 @@ export const TutorialPage = StandalonePage({
   subtitle: "A collection of tutorials to help you get started with KubeJS.",
   content: ``,
   subpages: {
-    getting_started,
-    editing_recipes,
-    editing_tags,
+    // getting_started,
+    // editing_recipes,
+    // editing_tags,
   },
 })
 
@@ -37,16 +37,14 @@ export const TutorialPage2 = Page({
   subtitle: 'A collection of tutorials to help you get started with KubeJS.',
   content: '<TutorialList/>',
   subpages: {
-    getting_started: Page({
-      title: 'Getting Started',
-      subtitle: getting_started.$subtitle,
-      content: getting_started.$content,
-    }),
+    getting_started,
+    editing_recipes,
+    editing_tags,
   },
   components: (ctx) => ({
     TutorialList: () => <section className="mt-8 flex flex-col gap-2">
       {Object.entries(TutorialPage2.$subdir).map(([slug, tutorial]) => (
-        <CardLink href={`/docs/guide/${ slug }`} key={slug}>
+        <CardLink href={`${ ctx.currPath }/${ slug }`} key={slug}>
           <CardTitle>{tutorial.$title}</CardTitle>
           <CardDescription>{tutorial.$subtitle}</CardDescription>
         </CardLink>

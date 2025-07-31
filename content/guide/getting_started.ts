@@ -1,11 +1,10 @@
-import { Page } from "@/lib/docs/docs3"
 import { LatvianDiscordInvite } from "../constants"
-import { Tutorial } from "./+index"
+import { TutorialPage } from "./+template"
 
-export const getting_started = Tutorial(
-  "Getting Started",
-  "A guide to help you get started with KubeJS.",
-  `
+export const getting_started = TutorialPage({
+  title: "Getting Started",
+  subtitle: "A guide to help you get started with KubeJS.",
+  content: `
 <Warn>
 It is mandatory that you learn the basics of programming and JavaScript before you start using KubeJS!
 </Warn>
@@ -40,7 +39,7 @@ These are Script Folders in which you'll write your scripts.
 
 Now, you should be ready to begin using KubeJS!
 
-Look to the other wiki pages for more info, and if you have any more questions, feel free to ask in the [latvian.dev Discord Server](${LatvianDiscordInvite})!
+Look to the other wiki pages for more info, and if you have any more questions, feel free to ask in the [latvian.dev Discord Server](${ LatvianDiscordInvite })!
 
   `
-)
+})

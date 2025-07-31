@@ -1,53 +1,59 @@
 import type { MDXComponents } from "next-mdx-remote-client"
 
 type PageCtx = {
-  href: string,
-  // slug: string,
+  currPath: string,
 }
 
-type Page = {
-  $subdir: Record<string, Page>,
+export type Page<
+  P extends Record<string, Page> = Record<string, Page<any, any>>,
+  M extends Record<string, any> = Record<string, any>,
+> = {
+  // dir properties
+  $subdir: P,
+  // page properties
   $title?: string,
   $subtitle?: string,
   $content?: string,
-  $meta?: Record<string, any>,
+  $meta: M,
   $components?: (ctx: PageCtx) => MDXComponents,
 }
-// type PageFn = (ctx: PageCtx) => Page
-
 
 export function Page<
-  TPage extends Page,
-  Meta
+  P extends Record<string, Page> = {},
+  M extends Record<string, any> = {},
 // NB: generics isn't used in [...slug] but can be used
 //  if manual rendering is needed.
 >(opts: {
-  roothref?: string,
   title: string,
   subtitle?: string,
   content?: string,
-  subpages?: Record<string, TPage>,
-  meta?: Meta,
+  subpages?: P,
+  meta?: M,
   components?: (ctx: PageCtx) => MDXComponents,
 }) {
+
   return {
-    $href: opts.roothref ?? "/",
     $title: opts.title,
     $subtitle: opts.subtitle,
-    $content: opts.content,
-    $subdir: opts.subpages ?? {},
-    $meta: opts.meta ?? {},
+    $content: `
+    <Title>${ opts.title }</Title>
+    <Subtitle>${ opts.subtitle ?? "" }</Subtitle>
+    
+    ${ opts.content }
+    `,
+    $subdir: opts.subpages ?? {} as P,
+    $meta: opts.meta ?? {} as M,
     $components: opts.components ?? (() => ({})),
   }
 }
 
-export function StubDir<TPage extends Page>(opts: {
-  subpages?: Record<string, TPage>,
-}) {
-  return (() => ({
-    $subdir: opts.subpages ?? {},
-  }))
-}
+// export function StubDir<TPage extends Page>(opts: {
+//   subpages?: Record<string, TPage>,
+// }) {
+//   return (() => ({
+//     $subdir: opts.subpages ?? {},
+//   }))
+// }
 
 
 
@@ -59,40 +65,27 @@ type ResolvedPage = Omit<Page, "$subdir"> & {
   $subdir: Record<string, ResolvedPage>,
 }
 
-// export function resolveDirectory(
-//   currPath: string,
-//   rootPage: Page,
-//   slug?: string,
-// ) {
+export function resolveDocsHref(rootHref: string, rootPage: Page) {
+  // Plugin system, maybe?
 
-//   const documentList: Page[] = []
+  // Adds .href mutably, interal props in .meta, based on root .href
+  for (const slug in rootPage.$subdir) {
+    const subpage = rootPage.$subdir[slug]
+    subpage.$meta._$href = `${ rootHref }/${ slug }`
+    resolveDocsHref(subpage.$meta.$href, subpage)
+  }
 
-//   function recursiveResolve(
-//     currPath: string,
-//     pageFn: Page,
-//     slug?: string,
-//   ): ResolvedPage {
-//     const resolvedPage = pageFn({
-//       href: currPath,
-//       slug: slug ?? '#root',
-//     })
-//     documentList.push(resolvedPage)
-//     const resolvedSubdir = Object.fromEntries(
-//       Object.entries(resolvedPage.$subdir).map(([subSlug, subPageFn]) => {
-//         return [subSlug, recursiveResolve(`${ currPath }/${ subSlug }`, subPageFn, subSlug)]
-//       })
-//     )
-//     return {
-//       ...resolvedPage,
-//       $subdir: resolvedSubdir,
-//     }
-//   }
-
-//   const resolved = recursiveResolve(currPath, rootPage, slug)
-
-//   return { resolved, documentList }
-// }
-
+  // Adds prev and next mutable, internal props in .meta, somehow?
+  const subdirKeys = Object.keys(rootPage.$subdir)
+  for (let i = 0; i < subdirKeys.length; i++) {
+    const slug = subdirKeys[i]
+    const subpage = rootPage.$subdir[slug]
+    const prevKey = subdirKeys[i - 1] ?? null
+    const nextKey = subdirKeys[i + 1] ?? null
+    subpage.$meta._$prev = prevKey ? { page: rootPage.$subdir[prevKey], slug: prevKey } : null
+    subpage.$meta._$next = nextKey ? { page: rootPage.$subdir[nextKey], slug: nextKey } : null
+  }
+}
 
 export function getPageFromSlugs(
   resolvedRootPage: Page,
@@ -100,13 +93,35 @@ export function getPageFromSlugs(
 ) {
   // traverse resolved root page based on slugs
   let currentPage: Page | null = resolvedRootPage
+  let parentPage: Page | null = null
   for (const slug of slugs) {
     if (!currentPage.$subdir[slug]) {
-      return null // slug not found
+      return { page: null } // slug not found
     }
+    parentPage = currentPage
     currentPage = currentPage.$subdir[slug]
   }
-  return currentPage
+  // if (!parentPage) {
+  //   return { page: null } // no parent page found
+  // }
+
+  // // get prev and next page
+  // const slugsList = Object.keys(parentPage?.$subdir ?? {})
+  // const currentIndex = slugsList.indexOf(slugs[slugs.length - 1])
+  // const prevSlug = slugsList[currentIndex - 1] ?? null
+  // const nextSlug = slugsList[currentIndex + 1] ?? null
+  // let prev: { page: Page, slug: string } | null = null
+  // let next: { page: Page, slug: string } | null = null
+  // if (prevSlug) {
+  //   prev = { page: parentPage.$subdir[prevSlug], slug: prevSlug }
+  // }
+  // if (nextSlug) {
+  //   next = { page: parentPage.$subdir[nextSlug], slug: nextSlug }
+  // }
+
+  // return { page: currentPage, prev, next }
+
+  return { page: currentPage }
 }
 
 export function isPage(page: Page) {
@@ -136,3 +151,15 @@ export function isPage(page: Page) {
 //   }
 //   return docs
 // }
+
+// ^ Indexing
+// ------------------------------------------------
+// v Template Making
+
+type PageGroup = ReturnType<typeof PageGroup>
+export function PageGroup(title: string, content: Page[]) {
+  return {
+    title: title,
+    items: content,
+  }
+}

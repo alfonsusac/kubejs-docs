@@ -3,9 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
 import { cn } from "lazy-cn"
 import Link from "next/link"
-import { Document } from "flexsearch"
-import { docs_structure } from "../../content/structure"
-import { indexDocuments, type SearchDocument } from "@/lib/docs/search"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +24,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-
 
   // Todo! - Dev Only
   // const searchDocuments: SearchDocument[] = []

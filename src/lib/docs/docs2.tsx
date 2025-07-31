@@ -14,7 +14,7 @@ export type Page<T extends {} = {}> = BasePage & {
 } & Record<string, any> & T
 
 type PageGroup = ReturnType<typeof PageGroup>
-export function PageGroup(title: string, content: StandalonePage[]) {
+export function PageGroup(title: string, content: Page[]) {
   return {
     title: title,
     items: content,
