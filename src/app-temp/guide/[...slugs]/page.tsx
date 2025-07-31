@@ -3,7 +3,7 @@ import { prose } from "@/component/prose"
 import { MDX } from "@/component/mdx"
 import { CardDescription, CardLink, CardTitle } from "@/component/card"
 import type { Page } from "@/lib/docs/docs2"
-import { TutorialPage } from "../../../../../content/guide/+index"
+import { TutorialPage } from "../../../../content/guide/+index"
 
 export default async function DocsGuideSlugPage(props: {
   params: Promise<{ slugs: string[] }>

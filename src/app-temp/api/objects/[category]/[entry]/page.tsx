@@ -5,8 +5,8 @@ import { notFound } from "next/navigation"
 import { ClassTag, PackageTag } from "@/component/mdx"
 import { CardLink, CardTitle } from "@/component/card"
 import { CardGridSection } from "@/component/card-grid-lists"
-import { isMethodType, isObjectType } from "../../../../../../../content/api/helper"
-import { RenderDataType, RenderMethodOverloads } from "../../../../../../../content/api/helper.display"
+import { isMethodType, isObjectType } from "../../../../../../content/api/helper"
+import { RenderDataType, RenderMethodOverloads } from "../../../../../../content/api/helper.display"
 
 export default async function DocsAPIObjectsCategoryPage(props: {
   params: Promise<{ category: string, entry: string }>,

@@ -1,7 +1,8 @@
 import { PageGroup, StandalonePage } from "@/lib/docs/docs2"
 import { EventGroupsPage } from "./api/events/+index"
 import { FolderStructurePage } from "./folders/+index"
-import { TutorialPage } from "./guide/+index"
+import { TutorialPage, TutorialPage2 } from "./guide/+index"
+import { Page } from "@/lib/docs/docs3"
 
 export const docs_structure = [
   PageGroup("Getting Started", [
@@ -18,3 +19,13 @@ export const docs_structure = [
     StandalonePage({ href: "/docs/api/commands", title: "Commands" }),
   ]),
 ]
+
+
+export const docs_structure2 = Page({
+  title: "KubeJS Documentation",
+  subtitle: "Documentation for KubeJS, a Minecraft mod that allows you to create custom scripts and data packs.",
+  content: ``,
+  subpages: {
+    guide: TutorialPage2,
+  }
+})

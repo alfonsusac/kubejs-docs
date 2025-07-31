@@ -6,7 +6,7 @@ export const FolderStructurePage = StandalonePage({
   title: "Folder Structure",
   subtitle: "Learn about the folder structure of /kubejs.",
   content: ``,
-  collection: {
+  data: {
     assets: {
       $title: "/assets",
       $subtitle: "The assets folder",

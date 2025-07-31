@@ -1,3 +1,4 @@
+import { Page } from "@/lib/docs/docs3"
 import { LatvianDiscordInvite } from "../constants"
 import { Tutorial } from "./+index"
 

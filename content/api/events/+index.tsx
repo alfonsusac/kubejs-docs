@@ -31,7 +31,7 @@ export const EventGroupsPage = StandalonePage({
   Scripts go into the \`client_scripts/\` folder. Will be reloaded when you press \`F3+T\`. Most changes that are per-client (such as resource packs, Painter, and JEI) are client events.
 
   `,
-  collection: {
+  data: {
     events: eventGroups,
   },
   components: {
@@ -40,7 +40,7 @@ export const EventGroupsPage = StandalonePage({
         href={`/docs/api/events/${ name }`}>
         <CardTitle>{name}</CardTitle>
         <CardDescription>{eventGroup.$subtitle}</CardDescription>
-        <CardDescription className="pt-2">{Object.entries(eventGroup.$collection?.events ?? {}).length} Events</CardDescription>
+        <CardDescription className="pt-2">{Object.entries(eventGroup.$data?.events ?? {}).length} Events</CardDescription>
       </CardLink>)}
     </CardGridSection>
   }

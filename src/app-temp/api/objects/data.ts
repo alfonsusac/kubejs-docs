@@ -1,5 +1,5 @@
 import { readdir } from "fs/promises"
-import { isObjectType, type DataType } from "../../../../../content/api/helper"
+import { isObjectType, type DataType } from "../../../../content/api/helper"
 
 export async function getAPIObjects() {
 

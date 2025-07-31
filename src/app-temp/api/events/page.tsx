@@ -1,5 +1,5 @@
 import { article } from "@/component/article"
-import { EventGroupsPage } from "../../../../../content/api/events/+index"
+import { EventGroupsPage } from "../../../../content/api/events/+index"
 import { prose } from "@/component/prose"
 import { MDX } from "@/component/mdx"
 
@@ -9,7 +9,7 @@ export default function DocsAPIEventsPage() {
       <prose.h1>{EventGroupsPage.$title}</prose.h1>
       <prose.p>{EventGroupsPage.$subtitle}</prose.p>
       <MDX
-        source={EventGroupsPage.$content}
+        source={EventGroupsPage.$content ?? ""}
         components={EventGroupsPage.$components}
       />
     </article.layout>

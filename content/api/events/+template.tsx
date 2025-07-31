@@ -1,4 +1,4 @@
-import { StartupPill, ServerPill, ClientPill } from "@/app/docs/api/-components"
+import { StartupPill, ServerPill, ClientPill } from "@/app-temp/api/-components"
 import { CardLink, CardTitle, CardDescription } from "@/component/card"
 import { CardGridSection } from "@/component/card-grid-lists"
 import { prose } from "@/component/prose"
@@ -28,7 +28,7 @@ export function EventGroupPage(
 
     <EventGroupEvents />
     `,
-    collection: {
+    data: {
       events: eventGroup.$members,
     },
     components: {

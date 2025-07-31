@@ -106,6 +106,8 @@ export async function MDX(props: { source: string, components?: MDXComponents })
           <Tab className="bg-[#2e3440] rounded-md [&_pre]:my-0" {...props} />,
         Tabs: Tabs,
         Tab: Tab,
+        Title: prose.h1,
+        Subtitle: prose.p,
       }}
     />
   )

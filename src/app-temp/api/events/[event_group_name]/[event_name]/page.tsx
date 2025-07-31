@@ -1,21 +1,21 @@
 import { notFound } from "next/navigation"
 import { ArticleLayoutTemplate } from "@/component/article"
 import { prose } from "@/component/prose"
-import { isEventHandler, isMethodType, isObjectType } from "../../../../../../../content/api/helper"
-import { RenderMethodOverloads, tokenColors } from "../../../../../../../content/api/helper.display"
-import { EventGroupsPage } from "../../../../../../../content/api/events/+index"
+import { isEventHandler, isMethodType, isObjectType } from "../../../../../../content/api/helper"
+import { RenderMethodOverloads, tokenColors } from "../../../../../../content/api/helper.display"
+import { EventGroupsPage } from "../../../../../../content/api/events/+index"
 
 export default async function DocsAPIEventGroupEventPage(props: {
   params: Promise<{ event_name: string, event_group_name: string }>
 }) {
   const { event_name, event_group_name } = await props.params
 
-  const eventGroupPage = EventGroupsPage.$collection.events[event_group_name as keyof typeof EventGroupsPage.$collection.events]
+  const eventGroupPage = EventGroupsPage.$data.events[event_group_name as keyof typeof EventGroupsPage.$data.events]
   if (!eventGroupPage) {
     notFound()
   }
 
-  const event = eventGroupPage.$collection?.events[event_name]
+  const event = eventGroupPage.$data?.events[event_name]
   if (!event) {
     notFound()
   }

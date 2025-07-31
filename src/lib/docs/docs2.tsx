@@ -1,4 +1,5 @@
 import type { MDXComponents } from "next-mdx-remote-client"
+import type { SearchDocument } from "./search"
 
 export type BasePage = {
   $title: string,
@@ -20,23 +21,33 @@ export function PageGroup(title: string, content: StandalonePage[]) {
   }
 }
 
-export type StandalonePage = ReturnType<typeof StandalonePage>
+export type StandalonePage<T = {}> = {
+  $href: string,
+  $title: string,
+  $subtitle?: string,
+  $content?: string,
+  $subpages?: Record<string, StandalonePage>,
+  $data?: T,
+  $components?: MDXComponents,
+}
 
 export function StandalonePage<T = {}>(opts: {
   href: string,
   title: string,
   subtitle?: string,
   content?: string,
-  collection?: T,
+  subpages?: Record<string, StandalonePage>
+  data?: T,
   components?: MDXComponents,
-  indexFn?: (collection: T) => {}[]
+  indexFn?: (collection: T) => SearchDocument[]
 }) {
   return {
-    $title: opts.title,
     $href: opts.href,
-    $subtitle: opts.subtitle || "",
-    $content: opts.content || "",
-    $collection: (opts.collection ?? {}) as T,
+    $title: opts.title,
+    $subtitle: opts.subtitle,
+    $content: opts.content,
+    $subpages: opts.subpages,
+    $data: (opts.data ?? {}) as T,
     $components: opts.components,
   }
 }
@@ -47,13 +58,13 @@ export function CreateTemplatedPage(components?: MDXComponents) {
     title: string,
     subtitle?: string,
     content?: string,
-    collection?: T,
+    data?: T,
   ) => StandalonePage({
     href,
     title,
     subtitle,
     content,
-    collection,
+    data,
     components,
   })
 }

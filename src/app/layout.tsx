@@ -5,6 +5,7 @@ import { cn } from "lazy-cn"
 import Link from "next/link"
 import { Document } from "flexsearch"
 import { docs_structure } from "../../content/structure"
+import { indexDocuments, type SearchDocument } from "@/lib/docs/search"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,16 +28,19 @@ export default async function RootLayout({
   children: React.ReactNode
 }>) {
 
-  // Build search index
-  const index = new Document({
-    document: {
-      id: "id",
-      index: ["title", "subtitle", "content"],
-      store: ["title", "href", "subtitle"],
-    }
-  })
 
-  const flatPages = docs_structure.flat
+  // Todo! - Dev Only
+  // const searchDocuments: SearchDocument[] = []
+  // docs_structure.map(section => section.items.map(page => {
+  //   searchDocuments.push({
+  //     id: page.$href,
+  //     title: page.$title,
+  //     href: page.$href,
+  //     subtitle: page.$subtitle,
+  //     content: page.$content || "",
+  //   })
+  // }))
+  // indexDocuments(searchDocuments)
 
 
 
