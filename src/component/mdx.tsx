@@ -17,8 +17,10 @@ import type { ComponentProps } from "react"
 // Server Component
 export async function MDX(props: { source: string, components?: MDXComponents }) {
 
+  // Allow source modification
   let source = props.source
 
+  // Prevent bug with triple backtick not being recognized after CodeTab closing tag.
   source = source.replaceAll('<CodeTab>', '<CodeTab>\n')
 
   // Extract Code Blocks

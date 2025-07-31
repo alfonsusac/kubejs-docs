@@ -1,8 +1,9 @@
-import { getPageFromSlugs, resolveDocsHref, type Page } from "@/lib/docs/docs3"
+import { getBreadcrumbData, getPageFromSlugs, resolveDocsHref, type Page } from "@/lib/docs/docs3"
 import { docs_structure2 } from "../../../../content/structure"
 import { notFound } from "next/navigation"
 import { article } from "@/component/article"
 import { MDX } from "@/component/mdx"
+import { Breadcrumb } from "@/component/breadcrumb"
 
 
 // SSG Stuff
@@ -51,6 +52,10 @@ export default async function DocsPage(props: {
 
   return (
     <article.layout>
+      <Breadcrumb data={[
+        {href: "/docs", label: "Docs"},
+        ...getBreadcrumbData(docs_structure2, slugs)
+      ]} />
       <MDX
         source={`
         ${ page.$content ?? "" }
@@ -58,7 +63,7 @@ export default async function DocsPage(props: {
         ${ displayPrevNext ? `<PrevNext/>` : "" }
           `}
         components={{
-          ...page.$components?.({ currPath }),
+          ...page.$components?.({ currPath, page }),
           PrevNext: () => <article.PrevNext
             data={{ prevPage: page.$meta?._$prev, nextPage: page.$meta?._$next }}
             href={`/docs/${ slugs.slice(0, -1).join("/") }/`}

@@ -7,10 +7,12 @@ export default function DocsIndexPage() {
 
   resolveDocsHref('/docs', docs_structure2)
   return (
-    <article.layout>
+    <article.layout
+      hideBreadcrumb={true}
+    >
       <MDX
         source={docs_structure2.$content || ""}
-        components={docs_structure2.$components({ currPath: "/docs", })}
+        components={docs_structure2.$components({ currPath: "/docs", page: docs_structure2 })}
       />
     </article.layout>
   )

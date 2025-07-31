@@ -1,7 +1,8 @@
 import type { MDXComponents } from "next-mdx-remote-client"
 
-type PageCtx = {
+export type PageCtx = {
   currPath: string,
+  page: Page,
 }
 
 export type Page<
@@ -72,7 +73,7 @@ export function resolveDocsHref(rootHref: string, rootPage: Page) {
   for (const slug in rootPage.$subdir) {
     const subpage = rootPage.$subdir[slug]
     subpage.$meta._$href = `${ rootHref }/${ slug }`
-    resolveDocsHref(subpage.$meta.$href, subpage)
+    resolveDocsHref(subpage.$meta._$href, subpage)
   }
 
   // Adds prev and next mutable, internal props in .meta, somehow?
@@ -87,45 +88,64 @@ export function resolveDocsHref(rootHref: string, rootPage: Page) {
   }
 }
 
+
+export function traversePageTree(
+  root: Page,
+  slugs: string[],
+  onVisit: (page: Page, slug: string) => void,
+  onBreak: () => void = () => { }
+) {
+  let current = root
+  for (const slug of slugs) {
+    const next = current.$subdir?.[slug]
+    if (!next) {
+      onBreak()
+      break
+    }
+    onVisit(next, slug)
+    current = next
+  }
+}
+
+
+
+
+
 export function getPageFromSlugs(
   resolvedRootPage: Page,
   slugs: string[],
 ) {
-  // traverse resolved root page based on slugs
-  let currentPage: Page | null = resolvedRootPage
-  let parentPage: Page | null = null
-  for (const slug of slugs) {
-    if (!currentPage.$subdir[slug]) {
-      return { page: null } // slug not found
-    }
-    parentPage = currentPage
-    currentPage = currentPage.$subdir[slug]
-  }
-  // if (!parentPage) {
-  //   return { page: null } // no parent page found
-  // }
+  let currentPage: Page | null
 
-  // // get prev and next page
-  // const slugsList = Object.keys(parentPage?.$subdir ?? {})
-  // const currentIndex = slugsList.indexOf(slugs[slugs.length - 1])
-  // const prevSlug = slugsList[currentIndex - 1] ?? null
-  // const nextSlug = slugsList[currentIndex + 1] ?? null
-  // let prev: { page: Page, slug: string } | null = null
-  // let next: { page: Page, slug: string } | null = null
-  // if (prevSlug) {
-  //   prev = { page: parentPage.$subdir[prevSlug], slug: prevSlug }
-  // }
-  // if (nextSlug) {
-  //   next = { page: parentPage.$subdir[nextSlug], slug: nextSlug }
-  // }
+  traversePageTree(
+    resolvedRootPage,
+    slugs,
+    (page, slug) => currentPage = page,
+    () => currentPage = null // break traversal
+  )
 
-  // return { page: currentPage, prev, next }
-
-  return { page: currentPage }
+  return { page: currentPage! }
 }
 
-export function isPage(page: Page) {
+export function getBreadcrumbData(
+  rootPage: Page,
+  slugs: string[],
+) {
+  const breadcrumbs: { label: string, href: string }[] = []
 
+  traversePageTree(
+    rootPage,
+    slugs,
+    (page, slug) => {
+      breadcrumbs.push({
+        label: page.$title ?? slug,
+        href: page.$meta._$href,
+      })
+    },
+    () => { } // no break action needed
+  )
+
+  return breadcrumbs
 }
 
 // ^ Resolution

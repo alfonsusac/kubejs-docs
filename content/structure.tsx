@@ -1,10 +1,11 @@
-import { TutorialPage2 } from "./guide/+index"
+import { TutorialPage } from "./guide/+index"
 import { Page, PageGroup } from "@/lib/docs/docs3"
 import { CardGridSectionList } from "@/component/card-grid-lists"
+import { FolderStructurePage } from "./folders/+index"
 
 export const docs_structure = [
   PageGroup("Getting Started", [
-    TutorialPage2,
+    TutorialPage,
     // StandalonePage({ href: "/docs/tips", title: "Tips", subtitle: "A collection of tips and tricks to help you use KubeJS effectively." }),
     // FolderStructurePage,
     // StandalonePage({ href: "/docs/addons", title: "Addons", subtitle: "All KubeJS mod integrations" }),
@@ -29,7 +30,8 @@ export const docs_structure2 = Page({
   <DocsSectionList />
   `,
   subpages: {
-    guide: TutorialPage2,
+    guide: TutorialPage,
+    folder: FolderStructurePage
   },
   components: (ctx) => ({
     DocsSectionList: () =>
@@ -37,7 +39,8 @@ export const docs_structure2 = Page({
         {
           sectionTitle: "Getting Started",
           items: [
-            TutorialPage2
+            TutorialPage,
+            FolderStructurePage,
           ]
         }
       ]} />,
