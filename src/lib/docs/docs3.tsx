@@ -66,6 +66,7 @@ type ResolvedPage = Omit<Page, "$subdir"> & {
   $subdir: Record<string, ResolvedPage>,
 }
 
+// Resolve Docs Strucutre, basically making it a tree.
 export function resolveDocsHref(rootHref: string, rootPage: Page) {
   // Plugin system, maybe?
 
@@ -88,8 +89,19 @@ export function resolveDocsHref(rootHref: string, rootPage: Page) {
   }
 }
 
-
 export function traversePageTree(
+  root: Page,
+  onVisit: (page: Page) => void,
+) {
+  onVisit(root)
+  for (const slug in root.$subdir) {
+    const subpage = root.$subdir[slug]
+    traversePageTree(subpage, onVisit)
+  }
+}
+
+
+export function traversePageTreeWithSlug(
   root: Page,
   slugs: string[],
   onVisit: (page: Page, slug: string) => void,
@@ -117,7 +129,7 @@ export function getPageFromSlugs(
 ) {
   let currentPage: Page | null
 
-  traversePageTree(
+  traversePageTreeWithSlug(
     resolvedRootPage,
     slugs,
     (page, slug) => currentPage = page,
@@ -133,7 +145,7 @@ export function getBreadcrumbData(
 ) {
   const breadcrumbs: { label: string, href: string }[] = []
 
-  traversePageTree(
+  traversePageTreeWithSlug(
     rootPage,
     slugs,
     (page, slug) => {
@@ -156,6 +168,30 @@ export function getBreadcrumbData(
 // ^ Implementation
 // ------------------------------------------------
 // v Indexing
+
+export function getIndexablePageList(docs: Page) {
+
+  const searchDocuments: {
+    id: string
+    title: string
+    href: string
+    subtitle: string
+    content: string
+  }[] = []
+
+  traversePageTree(docs, (page) => {
+    if (!page.$meta._$href || !page.$title || !page.$subtitle) return
+    searchDocuments.push({
+      id: page.$meta._$href,
+      title: page.$title,
+      href: page.$meta._$href,
+      subtitle: page.$subtitle,
+      content: page.$content || "",
+    })
+  })
+
+  return searchDocuments
+}
 
 // export function GetSearchDocuments(page: Page) {
 //   const docs: SearchDocument[] = []

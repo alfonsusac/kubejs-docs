@@ -3,6 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
 import { cn } from "lazy-cn"
 import Link from "next/link"
+import { indexDocuments, type SearchDocument } from "@/lib/docs/search"
+import { resolveDocsHref, traversePageTree, traversePageTreeWithSlug } from "@/lib/docs/docs3"
+import { docs_structure2 } from "../../content/structure"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,6 +41,23 @@ export default async function RootLayout({
   // }))
   // indexDocuments(searchDocuments)
 
+  // // TODO - make this dev only code, index on dev, commit and push to production.
+  // const searchDocuments: SearchDocument[] = []
+  // resolveDocsHref('/docs', docs_structure2)
+  // traversePageTree(docs_structure2, (page) => {
+  //   if (!page.$meta._href || !page.$title || !page.$subtitle) return
+  //   searchDocuments.push({
+  //     id: page.$meta._$href,
+  //     title: page.$title,
+  //     href: page.$meta._href,
+  //     subtitle: page.$subtitle,
+  //     content: page.$content || "",
+  //   })
+  // })
+  // console.log(searchDocuments)
+  // indexDocuments(searchDocuments)
+
+
 
 
   return (
@@ -48,10 +68,12 @@ export default async function RootLayout({
 
         <div className="max-w-4xl mx-auto">
           <header className="flex gap-8 items-center h-14">
-            <Link href="/"                                            className="font-semibold">KubeJS</Link>
-            <Link href="/docs"                                        className="text-zinc-400/50 hover:text-zinc-400 text-sm">Documentation</Link>
-            <Link href="https://kubejs.com/support"   target="_blank" className="text-zinc-400/50 hover:text-zinc-400 text-sm">Support</Link>
+            {/* Convert to Component */}
+            <Link href="/" className="font-semibold">KubeJS</Link>
+            <Link href="/docs" className="text-zinc-400/50 hover:text-zinc-400 text-sm">Documentation</Link>
+            <Link href="https://kubejs.com/support" target="_blank" className="text-zinc-400/50 hover:text-zinc-400 text-sm">Support</Link>
             <Link href="https://kubejs.com/downloads" target="_blank" className="text-zinc-400/50 hover:text-zinc-400 text-sm">Downloads</Link>
+            <Link href="/docs/search" className="text-zinc-400/50 hover:text-zinc-400 text-sm">Search</Link>
           </header>
 
           <div id="root_layout_children_boundary" className="mt-4">
