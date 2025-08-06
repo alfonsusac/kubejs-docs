@@ -3,9 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
 import { cn } from "lazy-cn"
 import Link from "next/link"
-import { indexDocuments, type SearchDocument } from "@/lib/docs/search"
-import { resolveDocsHref, traversePageTree, traversePageTreeWithSlug } from "@/lib/docs/docs3"
-import { docs_structure2 } from "../../content/structure"
+import Form from 'next/form'
+import { prose } from "@/component/prose"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -74,6 +73,15 @@ export default async function RootLayout({
             <Link href="https://kubejs.com/support" target="_blank" className="text-zinc-400/50 hover:text-zinc-400 text-sm">Support</Link>
             <Link href="https://kubejs.com/downloads" target="_blank" className="text-zinc-400/50 hover:text-zinc-400 text-sm">Downloads</Link>
             <Link href="/docs/search" className="text-zinc-400/50 hover:text-zinc-400 text-sm">Search</Link>
+            {/* <Link className="bg-zinc-800/50 rounded-full text-sm text-zinc-700 p-1.5 px-4 w-full max-w-60" href="/docs/search">
+              Search
+            </Link> */}
+            <div className="grow" />
+
+            <Form action="/docs/search" className="w-full max-w-60">
+              <prose.input className="rounded-full" name="q" placeholder="Search" />
+            </Form>
+
           </header>
 
           <div id="root_layout_children_boundary" className="mt-4">

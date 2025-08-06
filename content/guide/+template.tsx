@@ -1,4 +1,4 @@
-import { Page } from "@/lib/docs/docs3"
+import { Page } from "@/lib/docs/docs4"
 
 export function TutorialPage(opts: {
   title: string,

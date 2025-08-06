@@ -1,5 +1,5 @@
 import { docs } from "@/component/docs"
-import { Page } from "@/lib/docs/docs3"
+import { Page } from "@/lib/docs/docs4"
 
 
 export const FolderStructurePage = Page({

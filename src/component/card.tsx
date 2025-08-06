@@ -1,15 +1,16 @@
 import { cn } from "lazy-cn"
+import Link from "next/link"
 
 export function CardLink(props: {
   href: string
   children: React.ReactNode
 }) {
   return (
-    <a href={props.href}
+    <Link href={props.href}
       className="block p-4 px-4 border border-foreground/10 rounded-md hover:bg-foreground/5 flex flex-col gap-0.5"
     >
       {props.children}
-    </a>
+    </Link>
   )
 }
 

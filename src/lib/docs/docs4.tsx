@@ -2,9 +2,13 @@
 // 
 // Uses the power of typescript to write content that are 
 // type-safe which makes it consistent.
+//
+// Drawbacks:
+// - no ISR support
 
-import { mkdir, writeFile } from "fs/promises"
 import type { MDXComponents } from "next-mdx-remote-client"
+import type { MDXRemote } from "next-mdx-remote-client/rsc"
+import type { ReactNode } from "react"
 
 // This is the base type for the Page type.
 export type Page = {
@@ -12,7 +16,7 @@ export type Page = {
   $title?: string,
   $subtitle?: string,
   $content?: string,
-  $meta: Record<string, any> & DefaultSerializableMeta,
+  $meta: DefaultMeta,
   $components?: (ctx: PageContext) => MDXComponents
 }
 
@@ -26,19 +30,27 @@ export type Page = {
 // Must be serializable! (no complex objects like Page)
 //
 // Todo - Add into plugin system
-type DefaultSerializableMeta = {
+// type DefaultSerializableMeta = {
+//   _$path?: string[],
+//   _$slug?: string,
+//   _$prev?: { $path: string[], $title?: string } | null,
+//   _$next?: { $path: string[], $title?: string } | null,
+//   _$breadcrumb?: { $label: string, $path: string[] }[]
+// }
+type DefaultMeta = {
+  _$resolved?: true,
   _$path?: string[],
   _$slug?: string,
-  _$prev?: { $path: string[], $title?: string } | null,
-  _$next?: { $path: string[], $title?: string } | null,
-  _$breadcrumb?: { $label: string, $path: string[] }[]
-  // _$parent?: Page | null,
+  _$prev?: Page | null,
+  _$next?: Page | null,
+  _$parent?: Page | null,
+  _$breadcrumb?: { $label: string, $path: string[] }[],
 }
 
 // Page context is used for rendering since the meta are
 // usually only hydrated after compiling the entire
 // page structure.
-type PageContext = {
+export type PageContext = {
   currPath: string,
   page: Page,
 }
@@ -51,7 +63,7 @@ export function Page(opts: {
   subpages?: Record<string, Page>,
   meta?: Record<string, any>,
   components?: (ctx: PageContext) => MDXComponents
-}) {
+}): Page {
   return {
     $title: opts.title,
     $subtitle: opts.subtitle,
@@ -59,20 +71,28 @@ export function Page(opts: {
     $subdir: opts.subpages ?? {},
     $meta: opts.meta ?? {},
     $components: opts.components
-  } satisfies Page
+  }
 }
 
-// Todo - plugin system
-export function buildDirectory(root: Page) {
-  // Downside: mutates page.
-  const resolveTreeDirectory = (root: Page, path: string[] = []) => {
+export function buildDirectory(nonCircularRoot: Page) {
+  if (nonCircularRoot.$meta._$resolved) {
+    return nonCircularRoot
+  }
+  console.log("Building Directory")
+  // Todo - Find way to not mutate page
+  const resolveTreeDirectory = (
+    root: Page, path: string[] = []
+  ) => {
+    root.$meta._$resolved = true
     root.$meta._$path = path
     root.$meta._$slug = path.at(-1)
+    // Resolve child pages first before other metas
     for (const slug in root.$subdir) {
       root.$subdir[slug].$meta._$parent = root
       resolveTreeDirectory(root.$subdir[slug], [...path, slug])
     }
 
+    // Prev-next meta
     const childKeys = Object.keys(root.$subdir)
     for (let i = 0; i < childKeys.length; i++) {
       const slug = childKeys[i]
@@ -81,19 +101,20 @@ export function buildDirectory(root: Page) {
       const nextKey = childKeys[i + 1] ?? null
       if (prevKey) {
         const prevPage = root.$subdir[prevKey]
-        subpage.$meta._$prev = { $path: prevPage.$meta._$path!, $title: prevPage.$title }
+        subpage.$meta._$prev = prevPage
       } else {
         subpage.$meta._$prev = null
       }
       if (nextKey) {
         const nextPage = root.$subdir[nextKey]
-        subpage.$meta._$next = { $path: nextPage.$meta._$path!, $title: nextPage.$title }
+        subpage.$meta._$next = nextPage
       } else {
         subpage.$meta._$next = null
       }
     }
   }
-  resolveTreeDirectory(root)
+  resolveTreeDirectory(nonCircularRoot)
+  return nonCircularRoot
 }
 
 // ^ Core
@@ -115,69 +136,68 @@ export function mapPage<T>(root: Page, mapFn: (page: Page) => T) {
 
 // ^ Utilities
 // ------------------------------------------------
-// v Serializer (tsx -> mdx
+// v SSG Utils
 
-import path from "path"
-
-async function writeAll(filemap: Map<`./${ string }.mdx`, string>) {
-  for (const [filepath, content] of filemap) {
-    try {
-      const dir = path.dirname(filepath)
-      await mkdir(dir, { recursive: true })
-      await writeFile(filepath, content)
-    } catch (error) {
-      console.log(`Failed writing file to ${ filepath }: ${ error }`)
+// Generate all possible slugs for the docs structure
+export function getAllStaticSlugs(root: Page) {
+  let params: { slugs: string[] }[] = []
+  const generateSlugs = (page: Page, prefix: string[] = []) => {
+    if (!page.$subdir) return
+    for (const dir in page.$subdir) {
+      // 1. add this page to slug
+      // 2. if it has children, recurse into children
+      const newprefix = [...prefix, dir]
+      params.push({ slugs: newprefix })
+      generateSlugs(page.$subdir[dir], newprefix)
     }
   }
+  generateSlugs(root)
+  return params
 }
 
-function relativePathJoin(base: `./${ string }`, ...paths: string[]) {
-  return ('.' + path.join(base.slice(1), ...paths)) as `./${ string }`
-}
-
-function mdxFilePath(file_path_without_extension: `./${ string }`) {
-  return (file_path_without_extension + '.mdx') as `./${ string }.mdx`
-}
-function injectToCustomMdx(content: string, obj: any) {
-  return `---json\n${ JSON.stringify(obj) }\n---end\n${ content }`
-}
-function extractCustomMdx(content: string) {
-  const match = content.match(/^---json\s*\n([\s\S]*?)\n---end\s*\n?/)
-  if (!match) {
-    throw new Error("Metadata block not found or malformed.")
+export function getPageFromSlug(root: Page, slugs: string[]) {
+  let currentPage: Page | null = null
+  let current = root
+  for (const slug of slugs) {
+    const next = current.$subdir?.[slug]
+    if (!next) {
+      currentPage = null
+      break
+    }
+    currentPage = next
+    current = next
   }
-  const jsonBlock = match[1]
-  const meta = JSON.parse(jsonBlock)
-  const body = content.slice(match[0].length) // remove metadata block from content
-  return { meta, body }
+  return currentPage
 }
 
-// Compiles all info written in Page() into the entry_folder
-// 
-// This will create a generated mdx folder that can be read by Next.js's ISR
-export async function compileAllPages(entry_folder: `./${ string }`, root: Page) {
-  const fileList = mapPage(root, (page) => {
-    const pathArr = page.$meta._$path
-    if (!pathArr) throw new Error('Root Page must be built using buildDirectory()')
-    const filepath = mdxFilePath(relativePathJoin(entry_folder, ...pathArr))
+// ^ SSG Utils
+// ------------------------------------------------
+// v Indexing Utils
 
-    // Modify content to include metadata here.
-    const content = injectToCustomMdx(page.$content ?? "", page.$meta)
+export function getIndexablePageList(docs: Page, baseHref: `/${ string }`) {
 
-    return [filepath, content as string] as const
-  }).filter(entry => {
-    return !!entry[1]
+  const searchDocuments: {
+    id: string
+    title: string
+    href: string
+    subtitle: string
+    content: string
+  }[] = []
+
+  traversePage(docs, (page) => {
+    if (!page.$meta._$path || !page.$title || !page.$subtitle) return
+    searchDocuments.push({
+      id: baseHref + '/' + page.$meta._$path.join('/'),
+      title: page.$title,
+      href: baseHref + '/' + page.$meta._$path.join('/'),
+      subtitle: page.$subtitle,
+      content: page.$content || "",
+    })
   })
 
-  await writeAll(new Map(fileList))
+  return searchDocuments
 }
 
-// ^ Serializer (tsx -> mdx
+// ^ Indexing Utils
 // ------------------------------------------------
-// v De-serializer mdx -> tsx)
-
-async function readGeneratedMdxFolder(entry_folder: `./${ string }`) {
-
-
-
-}
+// v Rendering

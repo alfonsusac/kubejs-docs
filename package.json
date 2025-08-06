@@ -11,6 +11,7 @@
   "dependencies": {
     "@radix-ui/react-tabs": "^1.1.12",
     "flexsearch": "^0.8.205",
+    "js-yaml": "^4.1.0",
     "lazy-cn": "^1.0.0",
     "mdast-util-from-markdown": "^2.0.2",
     "next": "15.4.4",

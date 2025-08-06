@@ -41,7 +41,7 @@ export function Breadcrumb(props: {
   </div>
 }
 
-function BreadcrumbItem(props: {
+export function BreadcrumbItem(props: {
   label: string,
   href?: string,
 }) {
@@ -62,7 +62,7 @@ function BreadcrumbItem(props: {
   )
 }
 
-function BreadcrumbSeparator() {
+export function BreadcrumbSeparator() {
   return (
     <div className="text-foreground/25 font-[SF_Mono]">
       →

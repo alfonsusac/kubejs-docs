@@ -2,8 +2,7 @@
 import { editing_recipes } from "./editing_recipes"
 import { getting_started } from "./getting_started"
 import { editing_tags } from "./editing_tags"
-import { Page } from "@/lib/docs/docs3"
-import { CardDescription, CardLink, CardTitle } from "@/component/card"
+import { Page } from "@/lib/docs/docs4"
 import { docs } from "@/component/docs"
 
 // docs v3

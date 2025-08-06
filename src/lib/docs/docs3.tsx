@@ -48,16 +48,6 @@ export function Page<
   }
 }
 
-// export function StubDir<TPage extends Page>(opts: {
-//   subpages?: Record<string, TPage>,
-// }) {
-//   return (() => ({
-//     $subdir: opts.subpages ?? {},
-//   }))
-// }
-
-
-
 // ^ Design
 // ------------------------------------------------
 // v Resolution
@@ -192,21 +182,6 @@ export function getIndexablePageList(docs: Page) {
 
   return searchDocuments
 }
-
-// export function GetSearchDocuments(page: Page) {
-//   const docs: SearchDocument[] = []
-//   docs.push({
-//     id: page({ href: '', slug: '' }).$href,
-//     href: page({ href: '', slug: '' }).$href,
-//     title: page({ href: '', slug: '' }).$title,
-//     subtitle: page({ href: '', slug: '' }).$subtitle ?? "",
-//     content: page({ href: '', slug: '' }).$content ?? "",
-//   })
-//   for (const subpage of Object.values(page({ href: '', slug: '' }).$subdir)) {
-//     docs.push(...GetSearchDocuments(subpage as Page))
-//   }
-//   return docs
-// }
 
 // ^ Indexing
 // ------------------------------------------------

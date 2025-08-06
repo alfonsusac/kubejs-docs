@@ -1,6 +1,6 @@
 import { Document } from "flexsearch"
-import { writeFileSync } from "fs"
-import { readFile } from "fs/promises"
+import { mkdirSync, writeFileSync } from "fs"
+import { readdir, readFile } from "fs/promises"
 
 export type SearchDocument = {
   id: string
@@ -29,8 +29,11 @@ export async function indexDocuments(searchDocuments: SearchDocument[]) {
   for (const page of searchDocuments) {
     index.add(page)
   }
-  index.export(async function (key, data) {
-    writeFileSync(SEARCH_INDEX_FILE, data, "utf8")
+  index.export(function (key, data) {
+    mkdirSync('./public/export/', { recursive: true })
+    writeFileSync('./public/export/' + key, data, {
+      encoding: 'utf-8',
+    })
   })
   return index
 }
@@ -38,8 +41,16 @@ export async function indexDocuments(searchDocuments: SearchDocument[]) {
 export async function loadIndexedDocuments() {
   try {
     const index = newDocument()
-    const data = await readFile(SEARCH_INDEX_FILE, "utf-8")
-    index.import('', data)
+
+    // load them in parallel
+    const files = await readdir("./public/export/")
+    await Promise.all(files.map(async file => {
+      const data = await readFile("./public/export/" + file, "utf8")
+      index.import(file, data)
+    }))
+
+    // const data = await readFile('./public/export/' + key, "utf-8")
+    // index.import(data)
     return index
   } catch (error) {
     console.error("Error loading search index:", error)
@@ -56,7 +67,9 @@ const normalize = (str: string) => str.toLowerCase()
 export function searchDocuments(index: Document, query: string) {
   const searchResults = query ? index.search(query, { enrich: true }) : null
 
-  const results = searchResults!
+  const results = searchResults
+
+  if (!results) return { rankedResults: [], searchResults: [] }
 
   const FIELD_PRIORITY = {
     title: 100,
