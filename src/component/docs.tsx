@@ -1,8 +1,8 @@
-import type { Page, PageCtx } from "@/lib/docs/docs3"
+import type { PageContext } from "@/lib/docs/docs4"
 import { CardLink, CardTitle, CardDescription } from "./card"
 
 export const docs = {
-  subdirGrid: (ctx: PageCtx) =>
+  subdirGrid: (ctx: PageContext) =>
     () =>
       <section className="mt-8 flex flex-col gap-2">
         {Object.entries(ctx.page.$subdir).map(([slug, tutorial]) => (

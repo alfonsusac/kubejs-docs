@@ -1,7 +1,7 @@
 import type { ComponentProps } from "react"
 import { CardDescription, CardLink, CardTitle } from "./card"
-import type { Page } from "@/lib/docs/docs3"
 import { cn } from "lazy-cn"
+import type { Page } from "@/lib/docs/docs4"
 
 export function CardGridSectionList(props: {
   data: {

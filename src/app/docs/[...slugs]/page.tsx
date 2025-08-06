@@ -1,11 +1,10 @@
-import { getBreadcrumbData, getPageFromSlugs, resolveDocsHref, type Page } from "@/lib/docs/docs3"
 import { docs_structure2 } from "../../../../content/structure"
 import { notFound } from "next/navigation"
 import { article } from "@/component/article"
 import { MDX } from "@/component/mdx"
 import path from "path"
 import { Breadcrumb, PageRenderer } from "@/lib/docs/docs4.components"
-import { buildDirectory, getAllStaticSlugs } from "@/lib/docs/docs4"
+import { buildDirectory, getAllStaticSlugs, getPageFromSlug } from "@/lib/docs/docs4"
 
 
 // SSG Stuff
@@ -20,7 +19,7 @@ export default async function DocsPage(props: {
 }) {
   const { slugs } = await props.params
   const root = buildDirectory(docs_structure2) // todo: cache this
-  const { page } = getPageFromSlugs(root, slugs)
+  const page = getPageFromSlug(root, slugs)
   if (!page) notFound()
   const currPath = `/docs/${ slugs.join("/") }`
   return (

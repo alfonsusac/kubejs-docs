@@ -2,16 +2,15 @@ import { StartupPill, ServerPill, ClientPill } from "@/app-temp/api/-components"
 import { CardLink, CardTitle, CardDescription } from "@/component/card"
 import { CardGridSection } from "@/component/card-grid-lists"
 import { prose } from "@/component/prose"
-import { StandalonePage } from "@/lib/docs/docs2"
 import { EventGroup, isEventHandler } from "../helper"
+import { Page } from "@/lib/docs/docs4"
 
 
 export function EventGroupPage(
   eventGroup: EventGroup,
   content: string,
 ) {
-  return StandalonePage({
-    href: `/docs/api/events/${ eventGroup.$label }`,
+  return Page({
     title: eventGroup.$label,
     subtitle: eventGroup.$info,
     content: `
@@ -28,10 +27,10 @@ export function EventGroupPage(
 
     <EventGroupEvents />
     `,
-    data: {
+    meta: {
       events: eventGroup.$members,
     },
-    components: {
+    components: () => ({
       EventGroupName: () => eventGroup.$label,
       EventGroupInfo: () => <prose.p>{eventGroup.$info}</prose.p>,
       EventGroupEventsSummary: () => {
@@ -62,6 +61,6 @@ export function EventGroupPage(
           </CardLink>
         })}
       </CardGridSection>
-    }
+    })
   })
 }

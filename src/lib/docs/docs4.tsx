@@ -16,7 +16,7 @@ export type Page = {
   $title?: string,
   $subtitle?: string,
   $content?: string,
-  $meta: DefaultMeta,
+  $meta: DefaultMeta & Record<string, any>,
   $components?: (ctx: PageContext) => MDXComponents
 }
 

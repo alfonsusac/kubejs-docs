@@ -1,14 +1,13 @@
 import { CardGridSection } from "@/component/card-grid-lists"
 import { BlockEventPage } from "./BlockEvents"
 import { CardDescription, CardLink, CardTitle } from "@/component/card"
-import { StandalonePage } from "@/lib/docs/docs2"
+import { Page } from "@/lib/docs/docs4"
 
 const eventGroups = {
   BlockEvents: BlockEventPage
 }
 
-export const EventGroupsPage = StandalonePage({
-  href: "/docs/api/events",
+export const EventGroupsPage = Page({
   title: "Events",
   subtitle: "List of all events that KubeJS supports.",
   content: `
@@ -31,19 +30,19 @@ export const EventGroupsPage = StandalonePage({
   Scripts go into the \`client_scripts/\` folder. Will be reloaded when you press \`F3+T\`. Most changes that are per-client (such as resource packs, Painter, and JEI) are client events.
 
   `,
-  data: {
+  meta: {
     events: eventGroups,
   },
-  components: {
+  components: (ctx) => ({
     EventGroupList: () => <CardGridSection>
       {Object.entries(eventGroups).map(([name, eventGroup]) => <CardLink key={name}
         href={`/docs/api/events/${ name }`}>
         <CardTitle>{name}</CardTitle>
         <CardDescription>{eventGroup.$subtitle}</CardDescription>
-        <CardDescription className="pt-2">{Object.entries(eventGroup.$data?.events ?? {}).length} Events</CardDescription>
+        <CardDescription className="pt-2">{Object.entries(eventGroup.$meta?.events ?? {}).length} Events</CardDescription>
       </CardLink>)}
     </CardGridSection>
-  }
+  })
 })
 
 

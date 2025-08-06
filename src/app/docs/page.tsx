@@ -1,12 +1,12 @@
 import { docs_structure2 } from "../../../content/structure"
 import { article } from "@/component/article"
 import { MDX } from "@/component/mdx"
-import { resolveDocsHref } from "@/lib/docs/docs3"
+import { buildDirectory } from "@/lib/docs/docs4"
 import { PageRenderer } from "@/lib/docs/docs4.components"
 
 export default function DocsIndexPage() {
 
-  resolveDocsHref('/docs', docs_structure2)
+  buildDirectory(docs_structure2)
   return (
     <article.layout
       hideBreadcrumb={true}
